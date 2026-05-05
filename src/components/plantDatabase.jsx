@@ -4,22 +4,18 @@ import {
     Play, Loader2, Activity, RefreshCw, Bug, FlaskConical
 } from 'lucide-react';
 
-// Import the static plant catalog we created
 import { plantProfiles } from '../data/plantProfile.js';
 
 export default function PlantDatabase() {
     const hasData = Array.isArray(plantProfiles) && plantProfiles.length > 0;
     const [activeCrop, setActiveCrop] = useState(hasData ? plantProfiles[0] : null);
 
-    // --- NEW: Live Environment State (from Database/API) ---
     const [liveEnv, setLiveEnv] = useState({ temp: 0, ph: 0 });
     const [isEnvLoading, setIsEnvLoading] = useState(true);
 
-    // --- AI State ---
     const [aiStatus, setAiStatus] = useState('standby');
     const [aiResult, setAiResult] = useState({ days: 0, advice: "" });
 
-    // 1. Fetch the live environment data from your backend
     const fetchLiveEnvironment = () => {
         setIsEnvLoading(true);
         fetch('/api/farm-data')
@@ -43,18 +39,15 @@ export default function PlantDatabase() {
             });
     };
 
-    // Fetch on mount
     useEffect(() => {
         fetchLiveEnvironment();
     }, []);
 
-    // Reset AI when crop changes or new data is fetched
     useEffect(() => {
         setAiStatus('standby');
     }, [activeCrop, liveEnv]);
 
 
-    // 2. The AI Logic Engine (Now using Live Data)
     const runAiAnalysis = () => {
         setAiStatus('analyzing');
 
@@ -62,7 +55,6 @@ export default function PlantDatabase() {
             let dynamicAdvice = "";
             let adjustedDays = activeCrop.estimatedHarvestDays;
 
-            // Extract numeric targets from the profile string
             const tempMatch = activeCrop.tempRange.match(/(\d+)/g);
             const targetMinTemp = tempMatch ? parseInt(tempMatch[0]) : 20;
             const targetMaxTemp = tempMatch ? parseInt(tempMatch[1]) : 25;
@@ -71,7 +63,6 @@ export default function PlantDatabase() {
             const targetMaxPh = phMatch ? parseFloat(phMatch[1]) : 6.5;
             const targetMinPh = phMatch ? parseFloat(phMatch[0]) : 5.5;
 
-            // Evaluate Live Temp vs Target Temp
             if (liveEnv.temp > targetMaxTemp) {
                 dynamicAdvice += `⚠️ Heat stress risk (${liveEnv.temp}°C). Activating cooling fans. Reducing Nitrogen concentration. `;
                 adjustedDays += 2;
@@ -82,7 +73,6 @@ export default function PlantDatabase() {
                 dynamicAdvice += `✅ Temp is optimal. `;
             }
 
-            // Evaluate Live pH vs Target pH
             if (liveEnv.ph > targetMaxPh) {
                 dynamicAdvice += `Alkaline pH (${liveEnv.ph}) detected. Dispensing 5ml 'pH Down' into reservoir.`;
             } else if (liveEnv.ph < targetMinPh) {
@@ -107,7 +97,7 @@ export default function PlantDatabase() {
     return (
         <div className="flex flex-col gap-6 lg:flex-row">
 
-            {/* Left Sidebar: The Catalog */}
+
             <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:w-1/3">
                 <div className="mb-4 flex items-center gap-3 border-b border-slate-800/80 pb-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
@@ -129,7 +119,6 @@ export default function PlantDatabase() {
                                         : 'border border-slate-800/60 bg-slate-950/30 text-slate-400 hover:border-slate-700 hover:text-slate-200'
                                 }`}
                             >
-                                {/* Tiny image thumbnail in the sidebar */}
                                 <img
                                     src={crop.imageUrl}
                                     alt={crop.name}
@@ -145,10 +134,8 @@ export default function PlantDatabase() {
             {/* Right Panel: The Details */}
             <section className="flex flex-col gap-6 lg:w-2/3">
 
-                {/* Growth Recipe Targets */}
                 <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
 
-                    {/* UPDATED HEADER WITH IMAGE AND BADGE */}
                     <div className="flex items-center gap-5 mb-6 border-b border-slate-800/80 pb-5">
                         {activeCrop.imageUrl ? (
                             <img
@@ -174,7 +161,6 @@ export default function PlantDatabase() {
                         </div>
                     </div>
 
-                    {/* Standard Grid */}
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
                         <div className="flex flex-col items-center rounded-2xl border border-slate-800/80 bg-slate-950/40 p-4 text-center">
                             <Thermometer className="mb-2 h-6 w-6 text-violet-400" />
@@ -193,10 +179,8 @@ export default function PlantDatabase() {
                         </div>
                     </div>
 
-                    {/* NEW THREAT & N-P-K SECTION */}
                     {activeCrop.topThreat && activeCrop.npkRatio && (
                         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                            {/* Threat Alert Banner */}
                             <div className="flex items-center gap-3 rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4">
                                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-500/10 text-rose-400">
                                     <Bug className="h-5 w-5" />
@@ -207,7 +191,6 @@ export default function PlantDatabase() {
                                 </div>
                             </div>
 
-                            {/* NPK Ratio Visualizer */}
                             <div className="flex flex-col justify-center rounded-2xl border border-slate-800/60 bg-slate-950/40 p-4">
                                 <div className="mb-2 flex items-center gap-2">
                                     <FlaskConical className="h-4 w-4 text-cyan-400" />
@@ -227,7 +210,6 @@ export default function PlantDatabase() {
                     )}
                 </div>
 
-                {/* INTERACTIVE AI PREDICTION ENGINE */}
                 <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
                     <div className="mb-5 flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -250,7 +232,6 @@ export default function PlantDatabase() {
                         </button>
                     </div>
 
-                    {/* LIVE ENVIRONMENT SENSOR FEED */}
                     <div className="mb-5 flex gap-4 rounded-2xl border border-slate-700 bg-slate-800/30 p-4 relative overflow-hidden">
                         <div className="absolute top-2 right-3 flex items-center gap-2">
               <span className="flex h-2 w-2 relative">
@@ -281,7 +262,6 @@ export default function PlantDatabase() {
                         </button>
                     </div>
 
-                    {/* AI Results Reveal Area */}
                     <div className="flex flex-col gap-4 relative">
                         {aiStatus === 'standby' && (
                             <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-slate-950/60 backdrop-blur-[2px]">
