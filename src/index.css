@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-slate-950 text-slate-100 min-h-screen;
+  }
+}
+
+/* Thin dark scrollbar (mobile / overflow areas) */
+.scroll-bento {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(51 65 85) rgb(15 23 42);
+}
+
+.scroll-bento::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-bento::-webkit-scrollbar-track {
+  @apply rounded-full bg-slate-950;
+}
+
+.scroll-bento::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-slate-700;
+}
