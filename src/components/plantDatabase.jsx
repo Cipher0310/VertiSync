@@ -3,7 +3,7 @@ import {
     Thermometer, Droplet, SunMedium, Sparkles, Sprout,
     Play, Loader2, Activity, RefreshCw, Bug, FlaskConical
 } from 'lucide-react';
-
+//test
 import { plantProfiles } from '../data/plantProfile.js';
 
 export default function PlantDatabase() {
