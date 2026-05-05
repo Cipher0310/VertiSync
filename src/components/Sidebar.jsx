@@ -14,7 +14,7 @@ const nav = [
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 
-export default function Sidebar({ open, onClose }) {
+export default function Sidebar({ open, onClose, currentView, onNavigate }) {
   return (
     <>
       <div
@@ -39,21 +39,29 @@ export default function Sidebar({ open, onClose }) {
         <nav className="flex-1 space-y-1 p-3 md:pt-6">
           {nav.map((item) => {
             const Icon = item.icon;
-            const active = item.active;
+
+            // 2. Check if THIS item is the current view
+            const active = currentView === item.id;
+
             return (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                onClick={onClose}
-                className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition ${
-                  active
-                    ? 'border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 shadow-neon'
-                    : 'border border-transparent text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
-                }`}
-              >
-                <Icon className="h-5 w-5 shrink-0 opacity-90" strokeWidth={1.75} />
-                {item.label}
-              </a>
+                <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // 3. Navigate when clicked!
+                      if (onNavigate) onNavigate(item.id);
+                      onClose();
+                    }}
+                    className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition ${
+                        active
+                            ? 'border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 shadow-neon'
+                            : 'border border-transparent text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                    }`}
+                >
+                  <Icon className="h-5 w-5 shrink-0 opacity-90" strokeWidth={1.75} />
+                  {item.label}
+                </a>
             );
           })}
         </nav>

@@ -12,6 +12,7 @@ import Sidebar from './components/Sidebar.jsx';
 import TopNav from './components/TopNav.jsx';
 import HeroMetricCard from './components/HeroMetricCard.jsx';
 import ChartRow from './components/ChartRow.jsx';
+import PlantDatabase from  './components/plantDatabase.jsx'
 
 function ToggleRow({ icon: Icon, label, on, onToggle }) {
   return (
@@ -45,176 +46,206 @@ function ToggleRow({ icon: Icon, label, on, onToggle }) {
 
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // 2. ADD THE STATE TO TRACK THE CURRENT PAGE
+  const [currentView, setCurrentView] = useState('dashboard');
+
   const [irrigation, setIrrigation] = useState(true);
   const [fans, setFans] = useState(false);
   const [lights, setLights] = useState(true);
 
   return (
-    <div className="flex min-h-screen bg-slate-950">
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex min-h-screen bg-slate-950">
 
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col md:pl-0">
-        <TopNav onMenuClick={() => setSidebarOpen((o) => !o)} sidebarOpen={sidebarOpen} />
+        {/* 3. PASS THE ROUTING PROPS TO THE SIDEBAR */}
+        <Sidebar
+            open={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            currentView={currentView}
+            onNavigate={setCurrentView}
+        />
 
-        <div className="scroll-bento flex-1 overflow-y-auto px-4 pb-8 pt-4 md:px-6 md:pt-5">
-          <div className="mx-auto max-w-[1400px]">
-            {/* Desktop subheader: pump status (matches wide layout reference) */}
-            <div className="mb-4 hidden items-center justify-end md:flex">
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-1.5 text-xs font-medium text-slate-400">
-                Water Pump:{' '}
-                <span className="font-semibold text-amber-400 tabular-nums">STANDBY</span>
+        <div className="flex min-h-screen min-w-0 flex-1 flex-col md:pl-0">
+          <TopNav onMenuClick={() => setSidebarOpen((o) => !o)} sidebarOpen={sidebarOpen} />
+
+          <div className="scroll-bento flex-1 overflow-y-auto px-4 pb-8 pt-4 md:px-6 md:pt-5">
+            <div className="mx-auto max-w-[1400px]">
+
+              {/* Desktop subheader: pump status */}
+              <div className="mb-4 hidden items-center justify-end md:flex">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/60 px-4 py-1.5 text-xs font-medium text-slate-400">
+                  Water Pump:{' '}
+                  <span className="font-semibold text-amber-400 tabular-nums">STANDBY</span>
+                </div>
               </div>
-            </div>
 
-            <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-              {/* Active Hydration Matrix — spans two rows on large screens */}
-              <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:col-span-7 lg:col-start-1 lg:row-span-2 lg:row-start-1">
-                <h2 className="text-sm font-medium text-slate-400">Active Hydration Matrix</h2>
+              {/* 4. THE MAGIC SWITCH LOGIC */}
+              {currentView === 'dashboard' ? (
 
-                <div className="mt-4 flex flex-1 flex-col">
-                  <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950/40 p-8">
-                    <div className="flex flex-col items-center text-center">
-                      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 shadow-neon-cyan">
-                        <Droplets className="h-9 w-9" strokeWidth={1.5} />
+                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                    {/* Active Hydration Matrix */}
+                    <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:col-span-7 lg:col-start-1 lg:row-span-2 lg:row-start-1">
+                      <h2 className="text-sm font-medium text-slate-400">Active Hydration Matrix</h2>
+
+                      <div className="mt-4 flex flex-1 flex-col">
+                        <div className="relative overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-950 to-cyan-950/40 p-8">
+                          <div className="flex flex-col items-center text-center">
+                            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 shadow-neon-cyan">
+                              <Droplets className="h-9 w-9" strokeWidth={1.5} />
+                            </div>
+                            <p className="text-sm text-slate-400">Current Soil Moisture</p>
+                            <p className="mt-1 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl">
+                              38%
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="mt-5 rounded-2xl border border-slate-800/60 bg-slate-950/40 px-3 py-2">
+                          <ChartRow />
+                        </div>
+
+                        <div className="mt-4 flex justify-center md:hidden">
+                          <div className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/70 px-4 py-2 text-xs font-medium text-slate-400">
+                            Water Pump:{' '}
+                            <span className="font-semibold text-amber-400">STANDBY</span>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-sm text-slate-400">Current Soil Moisture</p>
-                      <p className="mt-1 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl">
-                        38%
+                    </section>
+
+                    {/* AI Predictive Irrigation Engine */}
+                    <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:col-span-5 lg:col-start-8 lg:row-start-1">
+                      <div className="flex items-start gap-3">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-500/35 bg-cyan-500/10 text-cyan-300 shadow-neon-cyan">
+                          <Sparkles className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h2 className="text-sm font-medium leading-snug text-slate-400">
+                            AI Predictive Irrigation Engine
+                          </h2>
+                        </div>
+                      </div>
+
+                      <p className="mt-5 text-xs font-medium uppercase tracking-wide text-slate-500">
+                        Estimated Time to Critical Dryness
                       </p>
-                    </div>
+                      <p className="mt-1 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-4xl font-bold text-transparent">
+                        2h 15m
+                      </p>
+
+                      <div className="mt-5">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-slate-400">Evaporation Rate</span>
+                          <span className="font-mono text-cyan-400">0.28%/min</span>
+                        </div>
+                        <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                          <div className="h-full w-[62%] rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 shadow-neon-cyan" />
+                        </div>
+                      </div>
+
+                      <button
+                          type="button"
+                          className="mt-6 w-full rounded-2xl border border-slate-700 bg-slate-950/50 py-3 text-sm font-medium text-slate-300 transition hover:border-slate-600 hover:bg-slate-900/80"
+                      >
+                        Calculate Harvest Window
+                      </button>
+
+                      <p className="mt-4 text-center text-xs italic text-slate-500 md:text-left">
+                        Optimizing water delivery for maximum yield...
+                      </p>
+                    </section>
+
+                    {/* Command Center */}
+                    <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:col-span-5 lg:col-start-8 lg:row-start-2">
+                      <h2 className="text-sm font-medium text-slate-400">Command Center / Manual Overrides</h2>
+
+                      <div className="mt-4 flex flex-col gap-3">
+                        <ToggleRow
+                            icon={Droplets}
+                            label="Automated Irrigation Loop"
+                            on={irrigation}
+                            onToggle={setIrrigation}
+                        />
+                        <ToggleRow
+                            icon={Fan}
+                            label="Cooling Fans"
+                            on={fans}
+                            onToggle={setFans}
+                        />
+                        <ToggleRow
+                            icon={Lightbulb}
+                            label="LED Grow Lights"
+                            on={lights}
+                            onToggle={setLights}
+                        />
+                      </div>
+
+                      <button
+                          type="button"
+                          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 py-3.5 text-sm font-bold uppercase tracking-wide text-slate-950 shadow-neon transition hover:brightness-110 active:scale-[0.99]"
+                      >
+                        <Droplet className="h-5 w-5" strokeWidth={2.2} />
+                        Manual Pump Override (Hold)
+                      </button>
+                    </section>
+
+                    {/* Environmental overview */}
+                    <section className="rounded-3xl border border-slate-800/80 bg-slate-900/40 p-5 backdrop-blur-sm lg:col-span-12 lg:col-start-1 lg:row-start-3">
+                      <h2 className="mb-4 text-sm font-medium text-slate-400">
+                        Simulated Environmental Overview
+                      </h2>
+                      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+                        <HeroMetricCard
+                            icon={Thermometer}
+                            label="Ambient Temp"
+                            value="24°C"
+                            status="Optimal"
+                            variant="purple"
+                        />
+                        <HeroMetricCard
+                            icon={Droplets}
+                            label="Humidity"
+                            value="65%"
+                            status="Optimal"
+                            variant="teal"
+                        />
+                        <HeroMetricCard
+                            icon={Droplet}
+                            label="Water pH"
+                            value="6.2"
+                            status="Slightly Acidic"
+                            statusClassName="text-amber-400"
+                            variant="yellow"
+                        />
+                        <HeroMetricCard
+                            icon={SunMedium}
+                            label="Light Spectrum"
+                            value="Veg"
+                            status="Vegetative Mode"
+                            statusClassName="text-emerald-400"
+                            variant="lime"
+                        />
+                      </div>
+                    </section>
                   </div>
 
-                  <div className="mt-5 rounded-2xl border border-slate-800/60 bg-slate-950/40 px-3 py-2">
-                    <ChartRow />
+              ) : currentView === 'plants' ? (
+
+                  /* 5. RENDER THE PLANT DATABASE WHEN SELECTED */
+                  <PlantDatabase />
+
+              ) : (
+
+                  /* Fallback for other pages */
+                  <div className="flex h-64 items-center justify-center rounded-3xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm">
+                    <p className="text-lg text-slate-500">Module "{currentView}" is currently offline.</p>
                   </div>
 
-                  <div className="mt-4 flex justify-center md:hidden">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900/70 px-4 py-2 text-xs font-medium text-slate-400">
-                      Water Pump:{' '}
-                      <span className="font-semibold text-amber-400">STANDBY</span>
-                    </div>
-                  </div>
-                </div>
-              </section>
+              )}
 
-              {/* AI Predictive Irrigation Engine */}
-              <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:col-span-5 lg:col-start-8 lg:row-start-1">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-cyan-500/35 bg-cyan-500/10 text-cyan-300 shadow-neon-cyan">
-                    <Sparkles className="h-5 w-5" />
-                  </div>
-                  <div>
-                    <h2 className="text-sm font-medium leading-snug text-slate-400">
-                      AI Predictive Irrigation Engine
-                    </h2>
-                  </div>
-                </div>
-
-                <p className="mt-5 text-xs font-medium uppercase tracking-wide text-slate-500">
-                  Estimated Time to Critical Dryness
-                </p>
-                <p className="mt-1 bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-4xl font-bold text-transparent">
-                  2h 15m
-                </p>
-
-                <div className="mt-5">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-400">Evaporation Rate</span>
-                    <span className="font-mono text-cyan-400">0.28%/min</span>
-                  </div>
-                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
-                    <div className="h-full w-[62%] rounded-full bg-gradient-to-r from-cyan-400 to-emerald-400 shadow-neon-cyan" />
-                  </div>
-                </div>
-
-                <button
-                  type="button"
-                  className="mt-6 w-full rounded-2xl border border-slate-700 bg-slate-950/50 py-3 text-sm font-medium text-slate-300 transition hover:border-slate-600 hover:bg-slate-900/80"
-                >
-                  Calculate Harvest Window
-                </button>
-
-                <p className="mt-4 text-center text-xs italic text-slate-500 md:text-left">
-                  Optimizing water delivery for maximum yield...
-                </p>
-              </section>
-
-              {/* Command Center */}
-              <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:col-span-5 lg:col-start-8 lg:row-start-2">
-                <h2 className="text-sm font-medium text-slate-400">Command Center / Manual Overrides</h2>
-
-                <div className="mt-4 flex flex-col gap-3">
-                  <ToggleRow
-                    icon={Droplets}
-                    label="Automated Irrigation Loop"
-                    on={irrigation}
-                    onToggle={setIrrigation}
-                  />
-                  <ToggleRow
-                    icon={Fan}
-                    label="Cooling Fans"
-                    on={fans}
-                    onToggle={setFans}
-                  />
-                  <ToggleRow
-                    icon={Lightbulb}
-                    label="LED Grow Lights"
-                    on={lights}
-                    onToggle={setLights}
-                  />
-                </div>
-
-                <button
-                  type="button"
-                  className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 py-3.5 text-sm font-bold uppercase tracking-wide text-slate-950 shadow-neon transition hover:brightness-110 active:scale-[0.99]"
-                >
-                  <Droplet className="h-5 w-5" strokeWidth={2.2} />
-                  Manual Pump Override (Hold)
-                </button>
-              </section>
-
-              {/* Environmental overview — full-width bento row */}
-              <section className="rounded-3xl border border-slate-800/80 bg-slate-900/40 p-5 backdrop-blur-sm lg:col-span-12 lg:col-start-1 lg:row-start-3">
-                <h2 className="mb-4 text-sm font-medium text-slate-400">
-                  Simulated Environmental Overview
-                </h2>
-                <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-                  <HeroMetricCard
-                    icon={Thermometer}
-                    label="Ambient Temp"
-                    value="24°C"
-                    status="Optimal"
-                    variant="purple"
-                  />
-                  <HeroMetricCard
-                    icon={Droplets}
-                    label="Humidity"
-                    value="65%"
-                    status="Optimal"
-                    variant="teal"
-                  />
-                  <HeroMetricCard
-                    icon={Droplet}
-                    label="Water pH"
-                    value="6.2"
-                    status="Slightly Acidic"
-                    statusClassName="text-amber-400"
-                    variant="yellow"
-                  />
-                  <HeroMetricCard
-                    icon={SunMedium}
-                    label="Light Spectrum"
-                    value="Veg"
-                    status="Vegetative Mode"
-                    statusClassName="text-emerald-400"
-                    variant="lime"
-                  />
-                </div>
-              </section>
             </div>
           </div>
         </div>
       </div>
-    </div>
   );
 }
