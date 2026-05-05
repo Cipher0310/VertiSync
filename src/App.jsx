@@ -12,7 +12,9 @@ import Sidebar from './components/Sidebar.jsx';
 import TopNav from './components/TopNav.jsx';
 import HeroMetricCard from './components/HeroMetricCard.jsx';
 import ChartRow from './components/ChartRow.jsx';
-import PlantDatabase from  './components/plantDatabase.jsx'
+import PlantDatabase from  './components/plantDatabase.jsx';
+import HardwareDiagnostics from './components/HardwareDiagnostics.jsx';
+import Analytics from './components/Analytics.jsx';
 
 function ToggleRow({ icon: Icon, label, on, onToggle }) {
   return (
@@ -233,6 +235,16 @@ export default function App() {
 
                   /* 5. RENDER THE PLANT DATABASE WHEN SELECTED */
                   <PlantDatabase />
+
+              ) : currentView === 'hardware' ? (
+                  
+                  /* 6. RENDER THE HARDWARE DIAGNOSTICS WHEN SELECTED */
+                  <HardwareDiagnostics />
+                  
+              ) : currentView === 'analytics' ? (
+
+                  /* 7. RENDER THE ANALYTICS WHEN SELECTED */
+                  <Analytics />
 
               ) : (
 
