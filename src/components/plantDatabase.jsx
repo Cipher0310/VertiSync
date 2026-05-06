@@ -8,7 +8,7 @@ import {
 //test
 import { plantProfiles } from '../data/plantProfile.js';
 
-export default function PlantDatabase() {
+export default function PlantDatabase({setGlobalActiveProfile}) {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOption, setSortOption] = useState('name-asc'); // Default sort
 
@@ -23,6 +23,8 @@ export default function PlantDatabase() {
     const [deployStatus, setDeployStatus] = useState('idle');
 
     const [farmSize, setFarmSize] = useState(50);
+
+
 
     const fetchLiveEnvironment = () => {
         setIsEnvLoading(true);
@@ -98,7 +100,10 @@ export default function PlantDatabase() {
         setDeployStatus('deploying');
         setTimeout(() => {
             setDeployStatus('success');
-            // Reset the button back to normal after 4 seconds
+
+            // --> ADD THIS LINE RIGHT HERE! <--
+            setGlobalActiveProfile(activeCrop.name);
+
             setTimeout(() => setDeployStatus('idle'), 4000);
         }, 2000);
     };

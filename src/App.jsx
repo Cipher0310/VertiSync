@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import {
   Droplets,
   Fan,
@@ -49,9 +49,15 @@ function ToggleRow({ icon: Icon, label, on, onToggle }) {
 export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // 2. ADD THE STATE TO TRACK THE CURRENT PAGE
   const [currentView, setCurrentView] = useState('dashboard');
+  const [globalActiveProfile, setGlobalActiveProfile] = useState(() => {
+      const savedProfile = localStorage.getItem('vertiSync_activeProfile');
+      return savedProfile ? savedProfile : 'Malaysian Bok Choy';
+    });
 
+  useEffect(() => {
+      localStorage.setItem('vertiSync_activeProfile', globalActiveProfile);
+    }, [globalActiveProfile]);
   const [irrigation, setIrrigation] = useState(true);
   const [fans, setFans] = useState(false);
   const [lights, setLights] = useState(true);
@@ -68,7 +74,12 @@ export default function App() {
         />
 
         <div className="flex min-h-screen min-w-0 flex-1 flex-col md:pl-0">
-          <TopNav onMenuClick={() => setSidebarOpen((o) => !o)} sidebarOpen={sidebarOpen} />
+            <TopNav
+                onMenuClick={() => setSidebarOpen((o) => !o)}
+                sidebarOpen={sidebarOpen}
+                globalActiveProfile={globalActiveProfile}
+                setGlobalActiveProfile={setGlobalActiveProfile}
+            />
 
           <div className="scroll-bento flex-1 overflow-y-auto px-4 pb-8 pt-4 md:px-6 md:pt-5">
             <div className="mx-auto max-w-[1400px]">
@@ -234,8 +245,7 @@ export default function App() {
               ) : currentView === 'plants' ? (
 
                   /* 5. RENDER THE PLANT DATABASE WHEN SELECTED */
-                  <PlantDatabase />
-
+                  <PlantDatabase setGlobalActiveProfile={setGlobalActiveProfile} />
               ) : currentView === 'hardware' ? (
                   
                   /* 6. RENDER THE HARDWARE DIAGNOSTICS WHEN SELECTED */

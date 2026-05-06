@@ -1,9 +1,12 @@
 import { useState } from 'react';
-import { Bell, ChevronDown, Menu, AlertTriangle, Droplet, CheckCircle2 } from 'lucide-react';
+import { Bell, ChevronDown, Menu, AlertTriangle, Droplet, CheckCircle2, Sprout } from 'lucide-react';
+import { plantProfiles } from '../data/plantProfile.js';
 
-export default function TopNav({ onMenuClick, sidebarOpen }) {
+export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, setGlobalActiveProfile }) {
     const [showNotifications, setShowNotifications] = useState(false);
     const [unreadCount, setUnreadCount] = useState(3);
+
+    const [showProfileMenu, setShowProfileMenu] = useState(false);
 
     const notifications = [
         {
@@ -41,14 +44,53 @@ export default function TopNav({ onMenuClick, sidebarOpen }) {
         VertiSync
       </h1>
 
-      <button
-        type="button"
-        className="hidden max-w-md flex-1 items-center justify-center gap-2 rounded-full border border-slate-700/80 bg-slate-900/70 px-4 py-2 text-sm text-slate-300 transition hover:border-slate-600 md:flex"
-      >
-        <span className="text-slate-500">Active Profile:</span>
-        <span className="font-medium text-slate-100">Malaysian Bok Choy</span>
-        <ChevronDown className="ml-1 h-4 w-4 text-slate-500" aria-hidden />
-      </button>
+        <div className="relative hidden max-w-md flex-1 md:flex justify-center">
+            <button
+                type="button"
+                onClick={() => {
+                    setShowProfileMenu(!showProfileMenu);
+                    setShowNotifications(false); // Close the other menu if open
+                }}
+                className={`flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm transition-all ${
+                    showProfileMenu
+                        ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400 shadow-neon'
+                        : 'border-slate-700/80 bg-slate-900/70 text-slate-300 hover:border-slate-600'
+                }`}
+            >
+                <span className={showProfileMenu ? "text-emerald-500/70" : "text-slate-500"}>Active Profile:</span>
+                <span className="font-medium">{globalActiveProfile}</span>
+                <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${showProfileMenu ? 'rotate-180 text-emerald-400' : 'text-slate-500'}`} aria-hidden />
+            </button>
+
+            {/* Profile Dropdown Panel */}
+            {showProfileMenu && (
+                <div className="absolute top-full mt-2 w-72 rounded-2xl border border-slate-800/80 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl z-50">
+                    <div className="mb-2 px-3 pt-2">
+                        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Select Edge Node Recipe</h3>
+                    </div>
+
+                    <div className="flex max-h-60 flex-col gap-1 overflow-y-auto pr-1">
+                        {plantProfiles.map((crop) => (
+                            <button
+                                key={crop.id}
+                                onClick={() => {
+                                    setGlobalActiveProfile(crop.name);
+                                    setShowProfileMenu(false);
+                                }}
+                                className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left ${
+                                    globalActiveProfile === crop.name
+                                        ? 'bg-emerald-500/10 text-emerald-400'
+                                        : 'text-slate-300 hover:bg-slate-800/60 hover:text-white'
+                                }`}
+                            >
+                                <Sprout className={`h-4 w-4 shrink-0 ${globalActiveProfile === crop.name ? 'text-emerald-400' : 'text-slate-500'}`} />
+                                <span className="truncate text-sm font-medium">{crop.name}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
 
         <div className="flex items-center gap-2 relative">
 
