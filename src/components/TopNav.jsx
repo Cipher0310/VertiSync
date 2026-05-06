@@ -31,7 +31,7 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
             id: 3,
             title: 'Recipe Deployment',
             time: '3h ago',
-            desc: 'System calibrated for Malaysian Bok Choy.',
+            desc: 'System calibrated for ' + globalActiveProfile + '.',
             icon: CheckCircle2,
             color: 'text-emerald-400',
             bg: 'bg-emerald-400/10'
