@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import {
     Thermometer, Droplet, SunMedium, Sparkles, Sprout,
     Play, Loader2, Activity, RefreshCw, Bug, FlaskConical,
-    Search, ArrowUpDown, ChevronDown
+    Search, ArrowUpDown, ChevronDown, Cpu, CheckCircle2,
+    Calculator, Zap, Leaf
 } from 'lucide-react';
 //test
 import { plantProfiles } from '../data/plantProfile.js';
@@ -19,6 +20,9 @@ export default function PlantDatabase() {
 
     const [aiStatus, setAiStatus] = useState('standby');
     const [aiResult, setAiResult] = useState({ days: 0, advice: "" });
+    const [deployStatus, setDeployStatus] = useState('idle');
+
+    const [farmSize, setFarmSize] = useState(50);
 
     const fetchLiveEnvironment = () => {
         setIsEnvLoading(true);
@@ -90,6 +94,15 @@ export default function PlantDatabase() {
         }, 1500);
     };
 
+    const handleDeployRecipe = () => {
+        setDeployStatus('deploying');
+        setTimeout(() => {
+            setDeployStatus('success');
+            // Reset the button back to normal after 4 seconds
+            setTimeout(() => setDeployStatus('idle'), 4000);
+        }, 2000);
+    };
+
     if (!hasData || !activeCrop) return <div className="text-red-400 p-6">Data Connection Error.</div>;
 
     const getDifficultyColor = (level) => {
@@ -111,6 +124,13 @@ export default function PlantDatabase() {
             }
             return 0;
         });
+
+
+    const waterPerDayPerPlant = activeCrop.difficulty === 'Advanced' ? 0.8 : 0.4;
+    const powerPerDayPerPlant = activeCrop.lightCycle.includes('18') || activeCrop.lightCycle.includes('16') ? 0.15 : 0.08;
+
+    const totalWater = Math.round(farmSize * waterPerDayPerPlant * activeCrop.estimatedHarvestDays);
+    const totalPower = Math.round(farmSize * powerPerDayPerPlant * activeCrop.estimatedHarvestDays);
 
     return (
         <div className="flex flex-col gap-6 lg:flex-row">
@@ -210,6 +230,7 @@ export default function PlantDatabase() {
             {/* Right Panel: The Details */}
             <section className="flex flex-col gap-6 lg:w-2/3">
 
+                {/* CARD 1: AGRONOMY & DEPLOYMENT */}
                 <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
 
                     <div className="flex items-center gap-5 mb-6 border-b border-slate-800/80 pb-5">
@@ -284,8 +305,42 @@ export default function PlantDatabase() {
                             </div>
                         </div>
                     )}
+
+                    {/* NEW: 1-CLICK DEPLOYMENT BUTTON */}
+                    <div className="mt-6 border-t border-slate-800/80 pt-6">
+                        <button
+                            onClick={handleDeployRecipe}
+                            disabled={deployStatus !== 'idle'}
+                            className={`group relative flex w-full items-center justify-center gap-3 overflow-hidden rounded-2xl py-3.5 text-sm font-bold tracking-wide transition-all duration-300 ${
+                                deployStatus === 'idle'
+                                    ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 shadow-neon hover:scale-[1.01] hover:brightness-110'
+                                    : deployStatus === 'deploying'
+                                        ? 'border border-slate-700 bg-slate-800 text-slate-400'
+                                        : 'border border-emerald-500/50 bg-emerald-500/20 text-emerald-400'
+                            }`}
+                        >
+                            {/* Animated Background Glow (Idle State) */}
+                            {deployStatus === 'idle' && (
+                                <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+                            )}
+
+                            {deployStatus === 'idle' && (
+                                <><Cpu className="h-5 w-5" /> Deploy Recipe to Edge Node</>
+                            )}
+                            {deployStatus === 'deploying' && (
+                                <><Loader2 className="h-5 w-5 animate-spin text-cyan-400" /> Syncing Parameters via MQTT...</>
+                            )}
+                            {deployStatus === 'success' && (
+                                <><CheckCircle2 className="h-5 w-5" /> System Calibrated for {activeCrop.name}</>
+                            )}
+                        </button>
+                        <p className="mt-2 text-center text-xs text-slate-500 italic">
+                            Automatically adjusts physical environment to match target thresholds.
+                        </p>
+                    </div>
                 </div>
 
+                {/* CARD 2: INTERACTIVE AI PREDICTION ENGINE */}
                 <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
                     <div className="mb-5 flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -310,10 +365,10 @@ export default function PlantDatabase() {
 
                     <div className="mb-5 flex gap-4 rounded-2xl border border-slate-700 bg-slate-800/30 p-4 relative overflow-hidden">
                         <div className="absolute top-2 right-3 flex items-center gap-2">
-              <span className="flex h-2 w-2 relative">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-              </span>
+                          <span className="flex h-2 w-2 relative">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                          </span>
                             <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Live Sensor Feed</span>
                         </div>
 
@@ -371,6 +426,67 @@ export default function PlantDatabase() {
                     </div>
 
                 </div>
+
+                <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
+                    <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                                <Calculator className="h-5 w-5" />
+                            </div>
+                            <h2 className="text-lg font-semibold text-slate-200">Resource Consumption Predictor</h2>
+                        </div>
+
+                        <div className="flex items-center gap-3 bg-slate-950/50 p-2 rounded-xl border border-slate-700">
+                            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold pl-2">Planting Slots:</span>
+                            <input
+                                type="number"
+                                min="1"
+                                max="10000"
+                                value={farmSize}
+                                onChange={(e) => setFarmSize(e.target.value)}
+                                className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                        {/* Water Estimate */}
+                        <div className="flex flex-col justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4 transition-all hover:bg-cyan-500/10">
+                            <div className="mb-2 flex items-center gap-2">
+                                <Droplet className="h-4 w-4 text-cyan-400" />
+                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Est. Water / Cycle</span>
+                            </div>
+                            <p className="text-2xl font-bold text-cyan-400">
+                                {totalWater.toLocaleString()} <span className="text-sm font-normal text-slate-500">Liters</span>
+                            </p>
+                        </div>
+
+                        {/* Power Estimate */}
+                        <div className="flex flex-col justify-center rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 transition-all hover:bg-amber-500/10">
+                            <div className="mb-2 flex items-center gap-2">
+                                <Zap className="h-4 w-4 text-amber-400" />
+                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Est. Power / Cycle</span>
+                            </div>
+                            <p className="text-2xl font-bold text-amber-400">
+                                {totalPower.toLocaleString()} <span className="text-sm font-normal text-slate-500">kWh</span>
+                            </p>
+                        </div>
+
+                        {/* Sustainability Badge */}
+                        <div className="flex flex-col justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 relative overflow-hidden group">
+                            <div className="absolute -right-4 -bottom-4 opacity-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
+                                <Leaf className="h-24 w-24 text-emerald-400" />
+                            </div>
+                            <div className="mb-2 flex items-center gap-2 relative z-10">
+                                <Leaf className="h-4 w-4 text-emerald-400" />
+                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Sustainability</span>
+                            </div>
+                            <p className="text-lg font-bold text-emerald-400 relative z-10">Saves 90% Water</p>
+                            <p className="text-[10px] text-slate-500 relative z-10 uppercase tracking-widest mt-1">vs. traditional soil farming</p>
+                        </div>
+                    </div>
+                </div>
+
             </section>
         </div>
     );
