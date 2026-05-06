@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import {
     Thermometer, Droplet, SunMedium, Sparkles, Sprout,
-    Play, Loader2, Activity, RefreshCw, Bug, FlaskConical, Search
+    Play, Loader2, Activity, RefreshCw, Bug, FlaskConical,
+    Search, ArrowUpDown, ChevronDown
 } from 'lucide-react';
 //test
 import { plantProfiles } from '../data/plantProfile.js';
 
 export default function PlantDatabase() {
     const [searchQuery, setSearchQuery] = useState('');
+    const [sortOption, setSortOption] = useState('name-asc'); // Default sort
 
     const hasData = Array.isArray(plantProfiles) && plantProfiles.length > 0;
     const [activeCrop, setActiveCrop] = useState(hasData ? plantProfiles[0] : null);
@@ -96,9 +98,19 @@ export default function PlantDatabase() {
         return 'bg-rose-500/10 text-rose-400 border-rose-500/30';
     };
 
-    const filteredPlants = plantProfiles.filter(crop =>
-        crop.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const processedPlants = plantProfiles
+        .filter(crop => crop.name.toLowerCase().includes(searchQuery.toLowerCase()))
+        .sort((a, b) => {
+            if (sortOption === 'name-asc') return a.name.localeCompare(b.name);
+            if (sortOption === 'name-desc') return b.name.localeCompare(a.name);
+            if (sortOption === 'harvest-asc') return a.estimatedHarvestDays - b.estimatedHarvestDays;
+            if (sortOption === 'harvest-desc') return b.estimatedHarvestDays - a.estimatedHarvestDays;
+            if (sortOption === 'difficulty') {
+                const ranks = { "Beginner": 1, "Intermediate": 2, "Advanced": 3 };
+                return ranks[a.difficulty] - ranks[b.difficulty];
+            }
+            return 0;
+        });
 
     return (
         <div className="flex flex-col gap-6 lg:flex-row">
@@ -112,43 +124,78 @@ export default function PlantDatabase() {
                     <h2 className="text-lg font-semibold text-slate-200">Crop Library</h2>
                 </div>
 
-                {/* SEARCH BAR UI */}
-                <div className="relative mb-4">
-                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                        <Search className="h-4 w-4 text-slate-500" />
+                {/* SEARCH & SORT UI */}
+                <div className="flex flex-col gap-3 mb-4">
+
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <Search className="h-4 w-4 text-slate-500" />
+                        </div>
+                        <input
+                            type="text"
+                            placeholder="Search crops..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                        />
                     </div>
-                    <input
-                        type="text"
-                        placeholder="Search crops..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
-                    />
+
+                    <div className="relative">
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                            <ArrowUpDown className="h-4 w-4 text-slate-500" />
+                        </div>
+                        <select
+                            value={sortOption}
+                            onChange={(e) => setSortOption(e.target.value)}
+                            className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-10 text-sm text-slate-200 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                        >
+                            <option value="name-asc">Alphabetical (A - Z)</option>
+                            <option value="name-desc">Alphabetical (Z - A)</option>
+                            <option value="harvest-asc">Harvest: Fastest First</option>
+                            <option value="harvest-desc">Harvest: Longest First</option>
+                            <option value="difficulty">Difficulty: Easiest First</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                            <ChevronDown className="h-4 w-4 text-slate-500" />
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex flex-col gap-3 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 300px)' }}>
-                    {/* Map through the FILTERED plants, not all plants */}
-                    {filteredPlants.length > 0 ? (
-                        filteredPlants.map((crop) => {
+                <div className="flex flex-col gap-3 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 340px)' }}>
+                    {processedPlants.length > 0 ? (
+                        processedPlants.map((crop) => {
                             const isActive = activeCrop.id === crop.id;
                             return (
                                 <button
                                     key={crop.id}
                                     onClick={() => setActiveCrop(crop)}
-                                    className={`flex items-center justify-start gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all ${
+                                    className={`flex items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all ${
                                         isActive
                                             ? 'border border-emerald-500/50 bg-gradient-to-r from-emerald-500/20 to-cyan-500/10 text-emerald-400 shadow-neon'
                                             : 'border border-slate-800/60 bg-slate-950/30 text-slate-400 hover:border-slate-700 hover:text-slate-200'
                                     }`}
                                 >
-                                    {crop.imageUrl && (
-                                        <img
-                                            src={crop.imageUrl}
-                                            alt={crop.name}
-                                            className={`h-8 w-8 shrink-0 rounded-full object-cover border-2 ${isActive ? 'border-emerald-400' : 'border-slate-700'}`}
-                                        />
+                                    <div className="flex items-center gap-3 truncate">
+                                        {crop.imageUrl && (
+                                            <img
+                                                src={crop.imageUrl}
+                                                alt={crop.name}
+                                                className={`h-8 w-8 shrink-0 rounded-full object-cover border-2 ${isActive ? 'border-emerald-400' : 'border-slate-700'}`}
+                                            />
+                                        )}
+                                        <span className="truncate text-left">{crop.name}</span>
+                                    </div>
+
+                                    {(sortOption === 'harvest-asc' || sortOption === 'harvest-desc') && (
+                                        <span className="shrink-0 text-[10px] uppercase tracking-wider text-slate-500 bg-slate-900 px-2 py-1 rounded-md">
+                                            {crop.estimatedHarvestDays} Days
+                                        </span>
                                     )}
-                                    <span className="truncate text-left">{crop.name}</span>
+                                    {sortOption === 'difficulty' && (
+                                        <span className={`shrink-0 text-[10px] uppercase tracking-wider px-2 py-1 rounded-md border ${getDifficultyColor(crop.difficulty)}`}>
+                                            {crop.difficulty}
+                                        </span>
+                                    )}
                                 </button>
                             );
                         })

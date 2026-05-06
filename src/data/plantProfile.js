@@ -1,8 +1,9 @@
 export const plantProfiles = [
+    // --- LEAFY GREENS ---
     {
         id: 'bok-choy',
         name: "Malaysian Bok Choy",
-        imageUrl: "https://jgsj.jayagrocer.com/cdn/shop/files/179529-1-1.jpg?v=1751953790",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Qoa2HURNpSZslHfw1grw4uoW5CqEO-S6bw&s",
         tempRange: "22°C - 26°C",
         phRange: "5.8 - 6.5",
         lightCycle: "16 Hours ON",
@@ -28,7 +29,7 @@ export const plantProfiles = [
         topThreat: "Pythium Root Rot"
     },
     {
-        id: 'lettuce',
+        id: 'lettuce-butterhead',
         name: "Butterhead Lettuce",
         imageUrl: "https://images.unsplash.com/photo-1622206151226-18ca2c9ab4a1?auto=format&fit=crop&w=400&q=80",
         tempRange: "16°C - 21°C",
@@ -42,19 +43,63 @@ export const plantProfiles = [
         topThreat: "Aphids"
     },
     {
-        id: 'cherry-tomatoes',
-        name: "Dwarf Cherry Tomatoes",
-        imageUrl: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&w=400&q=80",
-        tempRange: "20°C - 27°C",
-        phRange: "5.5 - 6.5",
-        lightCycle: "18 Hours ON",
-        stage: "Vegetative",
-        estimatedHarvestDays: 65,
-        nutrientAdvice: "Switch to High-Phosphorus blend in 10 days to support blossom development.",
-        difficulty: "Advanced",
-        npkRatio: { n: 30, p: 30, k: 40 },
-        topThreat: "Blossom End Rot"
+        id: 'lettuce-romaine',
+        name: "Romaine Lettuce",
+        imageUrl: "https://draxe.com/wp-content/uploads/2015/02/RomaineLettuceNutritionThumbnail.jpg",
+        tempRange: "15°C - 22°C",
+        phRange: "5.5 - 6.0",
+        lightCycle: "14 Hours ON",
+        stage: "Harvest Ready",
+        estimatedHarvestDays: 2,
+        nutrientAdvice: "Commence pure water flush. Halt all nutrient dosing prior to harvest.",
+        difficulty: "Beginner",
+        npkRatio: { n: 60, p: 15, k: 25 },
+        topThreat: "Tip Burn (Calcium Deficiency)"
     },
+    {
+        id: 'kale',
+        name: "Lacinato Kale",
+        imageUrl: "https://images.unsplash.com/photo-1524175869111-19b0893d20b7?auto=format&fit=crop&w=400&q=80",
+        tempRange: "15°C - 21°C",
+        phRange: "5.8 - 6.5",
+        lightCycle: "10 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 50,
+        nutrientAdvice: "Introduce Calcium-rich NPK blend to support rigid cellular structure.",
+        difficulty: "Intermediate",
+        npkRatio: { n: 60, p: 15, k: 25 },
+        topThreat: "Cabbage Worms"
+    },
+    {
+        id: 'arugula',
+        name: "Peppery Arugula (Rocket)",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKYF8hlIYykPlIWafF0fwTOTTwbu8hGmmtGA&s",
+        tempRange: "15°C - 20°C",
+        phRange: "6.0 - 6.5",
+        lightCycle: "12 Hours ON",
+        stage: "Seedling",
+        estimatedHarvestDays: 30,
+        nutrientAdvice: "Keep EC strictly below 1.2 to prevent excessive bitter compounds.",
+        difficulty: "Beginner",
+        npkRatio: { n: 70, p: 10, k: 20 },
+        topThreat: "Flea Beetles"
+    },
+    {
+        id: 'swiss-chard',
+        name: "Rainbow Swiss Chard",
+        imageUrl: "https://seedstreet.com.au/cdn/shop/products/Rainbowchard_grande.jpg?v=1620866092",
+        tempRange: "18°C - 24°C",
+        phRange: "6.0 - 6.5",
+        lightCycle: "14 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 45,
+        nutrientAdvice: "High magnesium required for vibrant stem coloration.",
+        difficulty: "Intermediate",
+        npkRatio: { n: 55, p: 20, k: 25 },
+        topThreat: "Leaf Miners"
+    },
+
+    // --- HERBS ---
     {
         id: 'sweet-basil',
         name: "Genovese Sweet Basil",
@@ -70,18 +115,76 @@ export const plantProfiles = [
         topThreat: "Downy Mildew"
     },
     {
-        id: 'kale',
-        name: "Lacinato Kale",
-        imageUrl: "https://images.unsplash.com/photo-1524175869111-19b0893d20b7?auto=format&fit=crop&w=400&q=80",
+        id: 'cilantro',
+        name: "Hydroponic Cilantro",
+        imageUrl: "https://cdn.shopify.com/s/files/1/0597/9376/8608/files/hydroponic_Cilantro_1024x1024.jpg?v=1687253758",
         tempRange: "15°C - 21°C",
-        phRange: "5.8 - 6.5",
-        lightCycle: "10 Hours ON",
-        stage: "Seedling",
-        estimatedHarvestDays: 50,
-        nutrientAdvice: "Introduce Calcium-rich NPK blend to support rigid cellular structure.",
+        phRange: "6.5 - 6.7",
+        lightCycle: "12 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 35,
+        nutrientAdvice: "Lower temperatures critical to prevent premature bolting.",
         difficulty: "Intermediate",
         npkRatio: { n: 60, p: 15, k: 25 },
-        topThreat: "Cabbage Worms"
+        topThreat: "Root Rot"
+    },
+    {
+        id: 'mint',
+        name: "Peppermint",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-z6sBMlAdvKDttclh0wxLfFJZSkBor6vH4w&s",
+        tempRange: "18°C - 22°C",
+        phRange: "5.5 - 6.0",
+        lightCycle: "14 Hours ON",
+        stage: "Harvest Ready",
+        estimatedHarvestDays: 5,
+        nutrientAdvice: "Aggressive grower. Monitor root zone to ensure pipes are not blocked.",
+        difficulty: "Beginner",
+        npkRatio: { n: 65, p: 15, k: 20 },
+        topThreat: "Spider Mites"
+    },
+    {
+        id: 'thyme',
+        name: "English Thyme",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7rCXwTSYhJ5u2AkefP1_kDUyjj8HzstDLEw&s",
+        tempRange: "18°C - 24°C",
+        phRange: "5.5 - 7.0",
+        lightCycle: "14 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 60,
+        nutrientAdvice: "Requires low EC (0.8 - 1.2). Do not overfeed.",
+        difficulty: "Intermediate",
+        npkRatio: { n: 40, p: 30, k: 30 },
+        topThreat: "Botrytis (Gray Mold)"
+    },
+    {
+        id: 'oregano',
+        name: "Greek Oregano",
+        imageUrl: "https://cdn.mos.cms.futurecdn.net/pRbKAL6amNVj7gTcRENYpK.jpg",
+        tempRange: "18°C - 26°C",
+        phRange: "6.0 - 7.0",
+        lightCycle: "14 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 45,
+        nutrientAdvice: "Keep humidity low to concentrate essential oils in leaves.",
+        difficulty: "Intermediate",
+        npkRatio: { n: 50, p: 25, k: 25 },
+        topThreat: "Aphids"
+    },
+
+    // --- FRUITING CROPS ---
+    {
+        id: 'cherry-tomatoes',
+        name: "Dwarf Cherry Tomatoes",
+        imageUrl: "https://images.unsplash.com/photo-1592841200221-a6898f307baa?auto=format&fit=crop&w=400&q=80",
+        tempRange: "20°C - 27°C",
+        phRange: "5.5 - 6.5",
+        lightCycle: "18 Hours ON",
+        stage: "Flowering",
+        estimatedHarvestDays: 65,
+        nutrientAdvice: "Switch to High-Phosphorus blend to support blossom development.",
+        difficulty: "Advanced",
+        npkRatio: { n: 30, p: 30, k: 40 },
+        topThreat: "Blossom End Rot"
     },
     {
         id: 'bell-peppers',
@@ -90,7 +193,7 @@ export const plantProfiles = [
         tempRange: "21°C - 28°C",
         phRange: "5.8 - 6.8",
         lightCycle: "16 Hours ON",
-        stage: "Vegetative",
+        stage: "Fruiting",
         estimatedHarvestDays: 75,
         nutrientAdvice: "Increase Magnesium and Potassium reserves; begin tapering off Nitrogen.",
         difficulty: "Advanced",
@@ -98,9 +201,53 @@ export const plantProfiles = [
         topThreat: "Spider Mites"
     },
     {
-        id: 'microgreens',
+        id: 'jalapeno',
+        name: "Jalapeño Peppers",
+        imageUrl: "https://www.thespruceeats.com/thmb/o_VeP8r9BqbQbKHWPGAqCqkhsZY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/GettyImages-813847678-ad59a8c8b1d548048f50f19199d26bb6.jpg",
+        tempRange: "24°C - 29°C",
+        phRange: "5.5 - 6.5",
+        lightCycle: "16 Hours ON",
+        stage: "Fruiting",
+        estimatedHarvestDays: 85,
+        nutrientAdvice: "High Potassium demand during fruit swell. Monitor EC spikes.",
+        difficulty: "Advanced",
+        npkRatio: { n: 20, p: 30, k: 50 },
+        topThreat: "Whiteflies"
+    },
+    {
+        id: 'strawberries',
+        name: "Everbearing Strawberries",
+        imageUrl: "https://images.unsplash.com/photo-1518977956812-cd3dbadaaf31?auto=format&fit=crop&w=400&q=80",
+        tempRange: "18°C - 24°C",
+        phRange: "5.5 - 6.0",
+        lightCycle: "14 Hours ON",
+        stage: "Flowering",
+        estimatedHarvestDays: 90,
+        nutrientAdvice: "Strict EC management (1.0 - 1.4) to prevent fruit deformation.",
+        difficulty: "Advanced",
+        npkRatio: { n: 20, p: 30, k: 50 },
+        topThreat: "Botrytis (Fruit Rot)"
+    },
+    {
+        id: 'cucumber',
+        name: "English Cucumber (Vine)",
+        imageUrl: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=400&q=80",
+        tempRange: "22°C - 28°C",
+        phRange: "5.5 - 6.0",
+        lightCycle: "14 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 55,
+        nutrientAdvice: "Extremely fast growth requires heavy feeding schedule (EC 1.8-2.5).",
+        difficulty: "Advanced",
+        npkRatio: { n: 40, p: 20, k: 40 },
+        topThreat: "Powdery Mildew"
+    },
+
+    // --- MICROGREENS & SPECIALTY ---
+    {
+        id: 'microgreens-mustard',
         name: "Spicy Mustard Microgreens",
-        imageUrl: "https://www.vegbed.com/cdn/shop/articles/1_2c0cf368-a70b-44dd-918e-8aee6ba1bd99.png?v=1742970160&width=1100",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBbdwdoYECoFThTZOpCvYIihncIllov0HLng&s",
         tempRange: "20°C - 24°C",
         phRange: "6.0 - 6.2",
         lightCycle: "12 Hours ON",
@@ -109,6 +256,34 @@ export const plantProfiles = [
         nutrientAdvice: "Zero nutrient solution required. Mist gently with pH-balanced pure water.",
         difficulty: "Beginner",
         npkRatio: { n: 0, p: 0, k: 0 },
-        topThreat: "Mold / Damping Off"
+        topThreat: "Damping Off (Fungus)"
+    },
+    {
+        id: 'microgreens-radish',
+        name: "Daikon Radish Microgreens",
+        imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJjTExjvcWao-KyviPs_HulRQSd5sHKlvmrQ&s",
+        tempRange: "18°C - 22°C",
+        phRange: "5.5 - 6.5",
+        lightCycle: "12 Hours ON",
+        stage: "Sprouting",
+        estimatedHarvestDays: 8,
+        nutrientAdvice: "Blackout dome required for first 3 days to encourage stem stretch.",
+        difficulty: "Beginner",
+        npkRatio: { n: 0, p: 0, k: 0 },
+        topThreat: "Mold"
+    },
+    {
+        id: 'watercress',
+        name: "Aquatic Watercress",
+        imageUrl: "https://gardenerspath.com/wp-content/uploads/2024/03/Watercress-Growing-in-Water.jpg",
+        tempRange: "10°C - 18°C",
+        phRange: "6.5 - 7.5",
+        lightCycle: "12 Hours ON",
+        stage: "Vegetative",
+        estimatedHarvestDays: 45,
+        nutrientAdvice: "Requires high iron levels and heavily oxygenated water.",
+        difficulty: "Intermediate",
+        npkRatio: { n: 50, p: 20, k: 30 },
+        topThreat: "Snail Infestation"
     }
 ];
