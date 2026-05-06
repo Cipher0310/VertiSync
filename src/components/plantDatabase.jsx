@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import {
     Thermometer, Droplet, SunMedium, Sparkles, Sprout,
-    Play, Loader2, Activity, RefreshCw, Bug, FlaskConical
+    Play, Loader2, Activity, RefreshCw, Bug, FlaskConical, Search
 } from 'lucide-react';
 //test
 import { plantProfiles } from '../data/plantProfile.js';
 
 export default function PlantDatabase() {
+    const [searchQuery, setSearchQuery] = useState('');
+
     const hasData = Array.isArray(plantProfiles) && plantProfiles.length > 0;
     const [activeCrop, setActiveCrop] = useState(hasData ? plantProfiles[0] : null);
 
@@ -94,6 +96,10 @@ export default function PlantDatabase() {
         return 'bg-rose-500/10 text-rose-400 border-rose-500/30';
     };
 
+    const filteredPlants = plantProfiles.filter(crop =>
+        crop.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div className="flex flex-col gap-6 lg:flex-row">
 
@@ -106,28 +112,51 @@ export default function PlantDatabase() {
                     <h2 className="text-lg font-semibold text-slate-200">Crop Library</h2>
                 </div>
 
-                <div className="flex flex-col gap-3">
-                    {plantProfiles.map((crop) => {
-                        const isActive = activeCrop.id === crop.id;
-                        return (
-                            <button
-                                key={crop.id}
-                                onClick={() => setActiveCrop(crop)}
-                                className={`flex items-center justify-start gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all ${
-                                    isActive
-                                        ? 'border border-emerald-500/50 bg-gradient-to-r from-emerald-500/20 to-cyan-500/10 text-emerald-400 shadow-neon'
-                                        : 'border border-slate-800/60 bg-slate-950/30 text-slate-400 hover:border-slate-700 hover:text-slate-200'
-                                }`}
-                            >
-                                <img
-                                    src={crop.imageUrl}
-                                    alt={crop.name}
-                                    className={`h-8 w-8 rounded-full object-cover border-2 ${isActive ? 'border-emerald-400' : 'border-slate-700'}`}
-                                />
-                                {crop.name}
-                            </button>
-                        );
-                    })}
+                {/* SEARCH BAR UI */}
+                <div className="relative mb-4">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                        <Search className="h-4 w-4 text-slate-500" />
+                    </div>
+                    <input
+                        type="text"
+                        placeholder="Search crops..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                    />
+                </div>
+
+                <div className="flex flex-col gap-3 overflow-y-auto pr-1" style={{ maxHeight: 'calc(100vh - 300px)' }}>
+                    {/* Map through the FILTERED plants, not all plants */}
+                    {filteredPlants.length > 0 ? (
+                        filteredPlants.map((crop) => {
+                            const isActive = activeCrop.id === crop.id;
+                            return (
+                                <button
+                                    key={crop.id}
+                                    onClick={() => setActiveCrop(crop)}
+                                    className={`flex items-center justify-start gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all ${
+                                        isActive
+                                            ? 'border border-emerald-500/50 bg-gradient-to-r from-emerald-500/20 to-cyan-500/10 text-emerald-400 shadow-neon'
+                                            : 'border border-slate-800/60 bg-slate-950/30 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                                    }`}
+                                >
+                                    {crop.imageUrl && (
+                                        <img
+                                            src={crop.imageUrl}
+                                            alt={crop.name}
+                                            className={`h-8 w-8 shrink-0 rounded-full object-cover border-2 ${isActive ? 'border-emerald-400' : 'border-slate-700'}`}
+                                        />
+                                    )}
+                                    <span className="truncate text-left">{crop.name}</span>
+                                </button>
+                            );
+                        })
+                    ) : (
+                        <div className="py-8 text-center text-sm text-slate-500">
+                            No crops match your search.
+                        </div>
+                    )}
                 </div>
             </section>
 
