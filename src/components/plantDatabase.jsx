@@ -9,7 +9,7 @@ import {
 // Import the default static database
 import { plantProfiles } from '../data/plantProfile.js';
 
-export default function PlantDatabase({setGlobalActiveProfile}) {
+export default function PlantDatabase({setGlobalActiveProfile, currentTemp = 24.0, currentPh = 6.2}) {
     // --- 1. DYNAMIC DATA STATE ---
     const [customPlants, setCustomPlants] = useState(() => {
         const saved = localStorage.getItem('vs_customPlants');
@@ -24,8 +24,7 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
     const hasData = Array.isArray(allPlants) && allPlants.length > 0;
     const [activeCrop, setActiveCrop] = useState(hasData ? allPlants[0] : null);
 
-    const [liveEnv, setLiveEnv] = useState({ temp: 0, ph: 0 });
-    const [isEnvLoading, setIsEnvLoading] = useState(true);
+    const liveEnv = { temp: currentTemp, ph: currentPh };
 
     const [aiStatus, setAiStatus] = useState('standby');
     const [aiResult, setAiResult] = useState({ days: 0, advice: "" });
@@ -57,30 +56,9 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
 
     const [newCrop, setNewCrop] = useState(defaultCropState);
 
-    const fetchLiveEnvironment = () => {
-        setIsEnvLoading(true);
-        fetch('/api/farm-data')
-            .then((res) => res.json())
-            .then((data) => {
-                const fetchedTemp = data?.temperature || 25.0;
-                const fetchedPh = data?.waterPh || 6.0;
-
-                setLiveEnv({ temp: parseFloat(fetchedTemp), ph: parseFloat(fetchedPh) });
-                setIsEnvLoading(false);
-            })
-            .catch((err) => {
-                setLiveEnv({ temp: 24.0, ph: 6.2 });
-                setIsEnvLoading(false);
-            });
-    };
-
-    useEffect(() => {
-        fetchLiveEnvironment();
-    }, []);
-
     useEffect(() => {
         setAiStatus('standby');
-    }, [activeCrop, liveEnv]);
+    }, [activeCrop, currentTemp, currentPh]);
 
     const runAiAnalysis = () => {
         setAiStatus('analyzing');
@@ -616,7 +594,7 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                         <div className="flex flex-1 flex-col justify-center">
                             <label className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1"><Activity className="w-3 h-3"/> Current Temp</label>
                             <div className="flex items-center gap-2">
-                                {isEnvLoading ? <Loader2 className="h-5 w-5 animate-spin text-cyan-600 dark:text-cyan-400" /> : <span className="text-2xl font-mono text-cyan-600 dark:text-cyan-400">{liveEnv.temp}°C</span>}
+                                <span className="text-2xl font-mono text-cyan-600 dark:text-cyan-400">{liveEnv.temp.toFixed(1)}°C</span>
                             </div>
                         </div>
 
@@ -625,13 +603,13 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                         <div className="flex flex-1 flex-col justify-center">
                             <label className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1"><Activity className="w-3 h-3"/> Current pH</label>
                             <div className="flex items-center gap-2">
-                                {isEnvLoading ? <Loader2 className="h-5 w-5 animate-spin text-emerald-600 dark:text-emerald-400" /> : <span className="text-2xl font-mono text-emerald-600 dark:text-emerald-400">{liveEnv.ph}</span>}
+                                <span className="text-2xl font-mono text-emerald-600 dark:text-emerald-400">{liveEnv.ph.toFixed(1)}</span>
                             </div>
                         </div>
 
-                        <button onClick={fetchLiveEnvironment} className="p-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition border border-slate-200 dark:border-slate-700 my-auto ml-2 group" title="Refresh Sensor Data">
-                            <RefreshCw className="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white" />
-                        </button>
+                        <div className="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 my-auto ml-2" title="Real-time Sync Active">
+                            <RefreshCw className="w-4 h-4 text-emerald-500 dark:text-emerald-400 animate-[spin_3s_linear_infinite]" />
+                        </div>
                     </div>
 
                     <div className="flex flex-col gap-4 relative">

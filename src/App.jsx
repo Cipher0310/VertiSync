@@ -86,6 +86,7 @@ export default function App() {
     const [currentTemp, setCurrentTemp] = useState(24);
     const [tempHistory, setTempHistory] = useState(() => Array(30).fill(24));
     const [currentHumidity, setCurrentHumidity] = useState(65);
+    const [currentPh, setCurrentPh] = useState(6.2);
 
     const currentMoistureRef = useRef(currentMoisture);
     const currentTempRef = useRef(currentTemp);
@@ -106,6 +107,7 @@ export default function App() {
         const moistureRef = ref(database, 'sensor_readings/soil_moisture');
         const tempRef = ref(database, 'sensor_readings/temperature');
         const humidityRef = ref(database, 'sensor_readings/humidity');
+        const phRef = ref(database, 'sensor_readings/ph');
 
         const unsubscribeMoisture = onValue(moistureRef, (snapshot) => {
             const liveMoisture = snapshot.val();
@@ -128,10 +130,18 @@ export default function App() {
             }
         });
 
+        const unsubscribePh = onValue(phRef, (snapshot) => {
+            const livePh = snapshot.val();
+            if (livePh !== null) {
+                setCurrentPh(livePh);
+            }
+        });
+
         return () => {
             unsubscribeMoisture();
             unsubscribeTemp();
             unsubscribeHumidity();
+            unsubscribePh();
         };
     }, []);
 
@@ -452,7 +462,7 @@ export default function App() {
                                                 <HeroMetricCard
                                                     icon={Thermometer}
                                                     label="Ambient Temp"
-                                                    value="24°C"
+                                                    value={`${currentTemp.toFixed(1)}°C`}
                                                     status="Optimal"
                                                     variant="purple"
                                                 />
@@ -466,7 +476,7 @@ export default function App() {
                                                 <HeroMetricCard
                                                     icon={Droplet}
                                                     label="Water pH"
-                                                    value="6.2"
+                                                    value={`${currentPh.toFixed(1)}`}
                                                     status="Slightly Acidic"
                                                     statusClassName="text-amber-400"
                                                     variant="yellow"
@@ -484,7 +494,11 @@ export default function App() {
                                     </div>
                                 ) : currentView === 'plants' ? (
                                     /* RENDER THE PLANT DATABASE WHEN SELECTED */
-                                    <PlantDatabase setGlobalActiveProfile={setGlobalActiveProfile} />
+                                    <PlantDatabase 
+                                        setGlobalActiveProfile={setGlobalActiveProfile} 
+                                        currentTemp={currentTemp} 
+                                        currentPh={currentPh} 
+                                    />
                                 ) : currentView === 'hardware' ? (
                                     /* RENDER THE HARDWARE DIAGNOSTICS WHEN SELECTED */
                                     <HardwareDiagnostics />
