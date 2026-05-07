@@ -8,6 +8,8 @@ import {
     Droplet,
     SunMedium,
 } from 'lucide-react';
+import { database } from './firebase.js';
+import { ref, onValue } from 'firebase/database';
 import Sidebar from './components/Sidebar.jsx';
 import TopNav from './components/TopNav.jsx';
 import HeroMetricCard from './components/HeroMetricCard.jsx';
@@ -72,6 +74,7 @@ export default function App() {
     const [moistureHistory, setMoistureHistory] = useState(() => Array(30).fill(38));
     const [currentTemp, setCurrentTemp] = useState(24);
     const [tempHistory, setTempHistory] = useState(() => Array(30).fill(24));
+    const [currentHumidity, setCurrentHumidity] = useState(65);
 
     const currentMoistureRef = useRef(currentMoisture);
     const currentTempRef = useRef(currentTemp);
@@ -89,34 +92,44 @@ export default function App() {
     }, []);
 
     useEffect(() => {
-        const tempTimer = setInterval(() => {
-            setCurrentTemp((prev) => {
-                const change = (Math.random() - 0.5) * 0.4;
-                return Math.max(20, Math.min(30, prev + change));
-            });
-        }, 2000);
-        return () => clearInterval(tempTimer);
+        const moistureRef = ref(database, 'sensor_readings/soil_moisture');
+        const tempRef = ref(database, 'sensor_readings/temperature');
+        const humidityRef = ref(database, 'sensor_readings/humidity');
+
+        const unsubscribeMoisture = onValue(moistureRef, (snapshot) => {
+            const liveMoisture = snapshot.val();
+            if (liveMoisture !== null) {
+                setCurrentMoisture(liveMoisture);
+            }
+        });
+
+        const unsubscribeTemp = onValue(tempRef, (snapshot) => {
+            const liveTemp = snapshot.val();
+            if (liveTemp !== null) {
+                setCurrentTemp(liveTemp);
+            }
+        });
+
+        const unsubscribeHumidity = onValue(humidityRef, (snapshot) => {
+            const liveHumidity = snapshot.val();
+            if (liveHumidity !== null) {
+                setCurrentHumidity(liveHumidity);
+            }
+        });
+
+        return () => {
+            unsubscribeMoisture();
+            unsubscribeTemp();
+            unsubscribeHumidity();
+        };
     }, []);
 
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         return localStorage.getItem('vertiSync_auth') === 'true';
     });
 
-    useEffect(() => {
-        if (isPumpActive) return;
-        const evaporationTimer = setInterval(() => {
-            setCurrentMoisture((prev) => Math.max(0, prev - 1));
-        }, 5000);
-        return () => clearInterval(evaporationTimer);
-    }, [isPumpActive]);
-
-    useEffect(() => {
-        if (!isPumpActive) return;
-        const pumpTimer = setInterval(() => {
-            setCurrentMoisture((prev) => Math.min(99, prev + 2));
-        }, 100);
-        return () => clearInterval(pumpTimer);
-    }, [isPumpActive]);
+    // The simulated evaporation and pump timers have been removed 
+    // since data is now arriving directly from the ESP32 via Firebase!
 
     const handlePumpStart = () => setIsPumpActive(true);
     const handlePumpEnd = () => setIsPumpActive(false);
@@ -436,7 +449,7 @@ export default function App() {
                                               <HeroMetricCard
                                                   icon={Droplets}
                                                   label="Humidity"
-                                                  value="65%"
+                                                  value={`${currentHumidity}%`}
                                                   status="Optimal"
                                                   variant="teal"
                                               />
