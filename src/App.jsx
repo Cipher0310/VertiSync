@@ -62,6 +62,40 @@ export default function App() {
   const [fans, setFans] = useState(false);
   const [lights, setLights] = useState(true);
 
+  const [currentMoisture, setCurrentMoisture] = useState(38);
+  const [isPumpActive, setIsPumpActive] = useState(false);
+  const [harvestState, setHarvestState] = useState('idle');
+
+  useEffect(() => {
+    if (isPumpActive) return;
+    const evaporationTimer = setInterval(() => {
+      setCurrentMoisture((prev) => Math.max(0, prev - 1));
+    }, 5000);
+    return () => clearInterval(evaporationTimer);
+  }, [isPumpActive]);
+
+  useEffect(() => {
+    if (!isPumpActive) return;
+    const pumpTimer = setInterval(() => {
+      setCurrentMoisture((prev) => Math.min(99, prev + 2));
+    }, 100);
+    return () => clearInterval(pumpTimer);
+  }, [isPumpActive]);
+
+  const handlePumpStart = () => setIsPumpActive(true);
+  const handlePumpEnd = () => setIsPumpActive(false);
+
+  const handleCalculateHarvest = () => {
+    setHarvestState('calculating');
+    setTimeout(() => {
+      setHarvestState('complete');
+    }, 2500);
+  };
+
+  const handleResetHarvest = () => {
+    setHarvestState('idle');
+  };
+
   return (
       <div className="flex min-h-screen bg-slate-950">
 
@@ -108,7 +142,7 @@ export default function App() {
                             </div>
                             <p className="text-sm text-slate-400">Current Soil Moisture</p>
                             <p className="mt-1 bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl">
-                              38%
+                              {currentMoisture}%
                             </p>
                           </div>
                         </div>
@@ -156,12 +190,45 @@ export default function App() {
                         </div>
                       </div>
 
-                      <button
-                          type="button"
-                          className="mt-6 w-full rounded-2xl border border-slate-700 bg-slate-950/50 py-3 text-sm font-medium text-slate-300 transition hover:border-slate-600 hover:bg-slate-900/80"
-                      >
-                        Calculate Harvest Window
-                      </button>
+                      {harvestState === 'idle' && (
+                        <button
+                            type="button"
+                            onClick={handleCalculateHarvest}
+                            className="mt-6 w-full rounded-2xl border border-slate-700 bg-slate-950/50 py-3 text-sm font-medium text-slate-300 transition-all duration-200 hover:border-slate-600 hover:bg-slate-900/80"
+                        >
+                          Calculate Harvest Window
+                        </button>
+                      )}
+
+                      {harvestState === 'calculating' && (
+                        <button
+                            type="button"
+                            disabled
+                            className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-700 bg-slate-950/50 py-3 text-sm font-medium text-slate-400 transition-all duration-200 cursor-not-allowed"
+                        >
+                          <div className="h-4 w-4 animate-[spin_1s_linear_infinite] rounded-full border-2 border-slate-400 border-t-cyan-400" />
+                          Analyzing Growth Data...
+                        </button>
+                      )}
+
+                      {harvestState === 'complete' && (
+                        <div className="mt-6 rounded-2xl border border-[#00FF66] bg-slate-950/60 p-4 shadow-[0_0_15px_rgba(0,255,102,0.15)] backdrop-blur-md transition-all duration-200">
+                          <p className="text-center font-medium text-slate-200">Optimal Harvest: May 12th - 14th</p>
+                          <div className="mt-2 flex justify-center">
+                            <span className="inline-block rounded border border-[#00FF66]/30 bg-[#00FF66]/10 px-2 py-0.5 text-xs font-semibold text-[#00FF66]">
+                              AI Confidence: 94%
+                            </span>
+                          </div>
+                          <div className="mt-3 text-center">
+                            <button 
+                              onClick={handleResetHarvest}
+                              className="text-xs text-slate-500 transition-colors hover:text-[#00FF66] underline decoration-slate-600 hover:decoration-[#00FF66]/50 underline-offset-2"
+                            >
+                              Recalculate
+                            </button>
+                          </div>
+                        </div>
+                      )}
 
                       <p className="mt-4 text-center text-xs italic text-slate-500 md:text-left">
                         Optimizing water delivery for maximum yield...
@@ -195,10 +262,19 @@ export default function App() {
 
                       <button
                           type="button"
-                          className="mt-5 flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-400 to-cyan-400 py-3.5 text-sm font-bold uppercase tracking-wide text-slate-950 shadow-neon transition hover:brightness-110 active:scale-[0.99]"
+                          onMouseDown={handlePumpStart}
+                          onMouseUp={handlePumpEnd}
+                          onMouseLeave={handlePumpEnd}
+                          onTouchStart={handlePumpStart}
+                          onTouchEnd={handlePumpEnd}
+                          className={`mt-5 flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm uppercase tracking-wide shadow-neon transition-all duration-200 active:scale-[0.99] ${
+                            isPumpActive 
+                              ? 'bg-[#00E5FF] text-black font-bold' 
+                              : 'bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 font-bold hover:brightness-110'
+                          }`}
                       >
                         <Droplet className="h-5 w-5" strokeWidth={2.2} />
-                        Manual Pump Override (Hold)
+                        {isPumpActive ? 'PUMP ACTIVE' : 'Manual Pump Override (Hold)'}
                       </button>
                     </section>
 
