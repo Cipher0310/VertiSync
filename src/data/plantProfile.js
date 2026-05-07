@@ -1,5 +1,4 @@
 export const plantProfiles = [
-    // --- LEAFY GREENS ---
     {
         id: 'bok-choy',
         name: "Malaysian Bok Choy",
