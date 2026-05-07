@@ -76,7 +76,7 @@ export default function PlantDatabase({setGlobalActiveProfile, currentTemp = 24.
             const targetMinPh = phMatch ? parseFloat(phMatch[0]) : 5.5;
 
             if (liveEnv.temp > targetMaxTemp) {
-                dynamicAdvice += `⚠️ Heat stress risk (${liveEnv.temp}°C). Activating cooling fans. Reducing Nitrogen concentration. `;
+                dynamicAdvice += `⚠️ Heat stress risk (${liveEnv.temp.toFixed(1)}°C). Activating cooling fans. Reducing Nitrogen concentration. `;
                 adjustedDays += 2;
             } else if (liveEnv.temp < targetMinTemp) {
                 dynamicAdvice += `⚠️ Temp below optimal. Root absorption slowed. Delaying feed schedule. `;
@@ -86,9 +86,9 @@ export default function PlantDatabase({setGlobalActiveProfile, currentTemp = 24.
             }
 
             if (liveEnv.ph > targetMaxPh) {
-                dynamicAdvice += `Alkaline pH (${liveEnv.ph}) detected. Dispensing 5ml 'pH Down' into reservoir.`;
+                dynamicAdvice += `Alkaline pH (${liveEnv.ph.toFixed(1)}) detected. Dispensing 5ml 'pH Down' into reservoir.`;
             } else if (liveEnv.ph < targetMinPh) {
-                dynamicAdvice += `Acidic pH (${liveEnv.ph}) detected. Dispensing 'pH Up' to prevent nutrient lockout.`;
+                dynamicAdvice += `Acidic pH (${liveEnv.ph.toFixed(1)}) detected. Dispensing 'pH Up' to prevent nutrient lockout.`;
             } else {
                 dynamicAdvice += `Proceeding with standard feed schedule.`;
             }
