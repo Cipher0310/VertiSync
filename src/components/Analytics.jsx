@@ -9,8 +9,19 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-export default function Analytics() {
+export default function Analytics({ activeProfile = 'Malaysian Bok Choy' }) {
   const [activeChartToggle, setActiveChartToggle] = useState('Water'); // 'Water' or 'Electricity'
+
+  // Mock data for AI Harvest Prediction based on activeProfile
+  const profileData = {
+    'Hydroponic Spinach': { yield: '11.2 kg', growth: 76 },
+    'Malaysian Bok Choy': { yield: '14.5 kg', growth: 82 },
+    'Microgreens Blend': { yield: '3.8 kg', growth: 95 },
+    'Cherry Tomatoes': { yield: '8.4 kg', growth: 45 },
+    'Sweet Basil': { yield: '6.2 kg', growth: 60 }
+  };
+
+  const currentCropData = profileData[activeProfile] || { yield: '12.0 kg', growth: 50 };
 
   // Chronologically sorted mock data for the 30-day trend chart
   const consumptionData = [
@@ -79,20 +90,20 @@ export default function Analytics() {
   };
 
   return (
-    <div className="space-y-6 pb-12 text-slate-200">
+    <div className="space-y-6 pb-12 text-slate-900 dark:text-slate-200 transition-colors">
       {/* Header */}
       <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-white md:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white md:text-3xl">
             Analytics & Predictive Yield
           </h1>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-slate-600 dark:text-slate-400">
             System performance metrics and AI crop forecasting
           </p>
         </div>
         <button 
           onClick={handleDownloadCSV}
-          className="group flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-400 transition hover:bg-cyan-500/20 hover:shadow-neon-cyan"
+          className="group flex items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-50 dark:bg-cyan-500/10 px-4 py-2 text-sm font-medium text-cyan-700 dark:text-cyan-400 transition hover:bg-cyan-100 dark:hover:bg-cyan-500/20 shadow-sm hover:shadow-cyan-500/20 dark:hover:shadow-neon-cyan"
         >
           <Download className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" />
           Download Report (CSV)
@@ -102,67 +113,67 @@ export default function Analytics() {
       {/* Top Row - Impact KPIs */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {/* Card 1 */}
-        <div className="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/40 p-5 backdrop-blur-md transition-colors hover:border-cyan-500/30">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-500/10 text-cyan-400 shadow-neon-cyan">
+        <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white/50 dark:border-slate-800 dark:bg-slate-900/40 p-5 backdrop-blur-md transition-colors hover:border-cyan-500/30 shadow-lg dark:shadow-none">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan-500/20 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shadow-sm dark:shadow-neon-cyan">
             <Droplet className="h-6 w-6" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Total Water Saved
             </p>
-            <p className="text-2xl font-bold text-white">
-              1,240 <span className="text-sm font-medium text-cyan-400">L</span>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">
+              1,240 <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400">L</span>
             </p>
           </div>
         </div>
 
         {/* Card 2 */}
-        <div className="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/40 p-5 backdrop-blur-md transition-colors hover:border-emerald-500/30">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 shadow-neon">
+        <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white/50 dark:border-slate-800 dark:bg-slate-900/40 p-5 backdrop-blur-md transition-colors hover:border-emerald-500/30 shadow-lg dark:shadow-none">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon">
             <Zap className="h-6 w-6" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Energy Efficiency
             </p>
-            <p className="text-2xl font-bold text-white">
-              94<span className="text-sm font-medium text-emerald-400">%</span>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">
+              94<span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">%</span>
             </p>
           </div>
         </div>
 
         {/* Card 3 */}
-        <div className="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/40 p-5 backdrop-blur-md transition-colors hover:border-purple-500/30">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-purple-500/20 bg-purple-500/10 text-purple-400 shadow-neon-purple">
+        <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white/50 dark:border-slate-800 dark:bg-slate-900/40 p-5 backdrop-blur-md transition-colors hover:border-purple-500/30 shadow-lg dark:shadow-none">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-purple-500/20 bg-purple-50 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 shadow-sm dark:shadow-neon-purple">
             <Leaf className="h-6 w-6" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="text-xs font-medium uppercase tracking-wide text-slate-400">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
               Est. Carbon Reduction
             </p>
-            <p className="text-2xl font-bold text-white">
-              42 <span className="text-sm font-medium text-purple-400">kg CO2</span>
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">
+              42 <span className="text-sm font-medium text-purple-600 dark:text-purple-400">kg CO2</span>
             </p>
           </div>
         </div>
       </div>
 
       {/* Middle Full Width - Resource Consumption Chart */}
-      <div className="rounded-3xl border border-slate-800 bg-slate-900/30 p-6 backdrop-blur-md">
+      <div className="rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800 dark:bg-slate-900/30 p-6 backdrop-blur-md shadow-lg dark:shadow-none transition-colors">
         <div className="mb-6 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
-          <h2 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
-            <Activity className="h-5 w-5 text-slate-400" />
+          <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+            <Activity className="h-5 w-5 text-slate-500 dark:text-slate-400" />
             Resource Consumption (30-Day Trend)
           </h2>
           
           {/* Custom Toggle Switch */}
-          <div className="flex items-center rounded-lg border border-slate-700 bg-slate-950/50 p-1">
+          <div className="flex items-center rounded-lg border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 p-1">
             <button
               onClick={() => setActiveChartToggle('Water')}
               className={`rounded-md px-4 py-1.5 text-xs font-medium transition-all ${
                 activeChartToggle === 'Water'
-                  ? 'bg-cyan-500/20 text-cyan-400 shadow-neon-cyan border border-cyan-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-cyan-50 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 shadow-sm dark:shadow-neon-cyan border border-cyan-500/30'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               Water
@@ -171,8 +182,8 @@ export default function Analytics() {
               onClick={() => setActiveChartToggle('Electricity')}
               className={`rounded-md px-4 py-1.5 text-xs font-medium transition-all ${
                 activeChartToggle === 'Electricity'
-                  ? 'bg-emerald-500/20 text-emerald-400 shadow-neon border border-emerald-500/30'
-                  : 'text-slate-400 hover:text-slate-200'
+                  ? 'bg-emerald-50 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon border border-emerald-500/30'
+                  : 'text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200'
               }`}
             >
               Electricity
@@ -189,7 +200,7 @@ export default function Analytics() {
                 <span className="w-8 shrink-0 text-right text-[10px] text-slate-500 pr-2">
                   {Math.round((currentMax / 4) * line)}
                 </span>
-                <div className="h-px flex-1 border-t border-dashed border-slate-800"></div>
+                <div className="h-px flex-1 border-t border-dashed border-slate-300 dark:border-slate-800"></div>
               </div>
             ))}
           </div>
@@ -201,13 +212,13 @@ export default function Analytics() {
               const heightPercent = (value / currentMax) * 100;
               const barColor =
                 activeChartToggle === 'Water'
-                  ? 'bg-gradient-to-t from-cyan-600/50 to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]'
-                  : 'bg-gradient-to-t from-emerald-600/50 to-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.2)]';
+                  ? 'bg-gradient-to-t from-cyan-400 to-cyan-500 dark:from-cyan-600/50 dark:to-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.2)]'
+                  : 'bg-gradient-to-t from-emerald-400 to-emerald-500 dark:from-emerald-600/50 dark:to-emerald-400 shadow-[0_0_15px_rgba(52,211,153,0.2)]';
 
               return (
                 <div key={idx} className="group relative flex h-full w-8 flex-col justify-end items-center sm:w-12">
                   {/* Tooltip on hover */}
-                  <div className="absolute -top-10 scale-0 rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-xs text-white opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100 z-10">
+                  <div className="absolute -top-10 scale-0 rounded-md border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 px-2 py-1 text-xs text-slate-800 dark:text-white opacity-0 transition-all group-hover:scale-100 group-hover:opacity-100 z-10 shadow-lg">
                     {value} {activeChartToggle === 'Water' ? 'L' : 'kWh'}
                   </div>
                   {/* The Bar */}
@@ -235,56 +246,57 @@ export default function Analytics() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         
         {/* Bottom Left - AI Yield Projections */}
-        <div className="flex flex-col rounded-3xl border border-slate-800 bg-slate-900/30 p-6 backdrop-blur-md lg:col-span-6">
+        <div className="flex flex-col rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800 dark:bg-slate-900/30 p-6 backdrop-blur-md lg:col-span-6 shadow-lg dark:shadow-none transition-colors">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-slate-200 flex items-center gap-2">
-              <Sprout className="h-5 w-5 text-purple-400" />
+            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200 flex items-center gap-2">
+              <Sprout className="h-5 w-5 text-purple-600 dark:text-purple-400" />
               AI Harvest Prediction
             </h2>
-            <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold tracking-wide text-emerald-400 shadow-neon">
+            <span className="rounded-full border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 px-2.5 py-1 text-[10px] font-bold tracking-wide text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon">
               Confidence Score: 96%
             </span>
           </div>
 
           <div className="mt-2 flex-1 space-y-5">
-            <div className="flex items-center gap-3 rounded-xl border border-slate-800/60 bg-slate-950/40 p-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-slate-800 text-slate-300">
+            <div className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800/60 dark:bg-slate-950/40 p-4 transition-colors">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white border border-slate-200 dark:border-none dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 <Leaf className="h-6 w-6" strokeWidth={1.5} />
               </div>
               <div>
-                <p className="text-xs font-medium text-slate-400">Active Crop</p>
-                <p className="text-base font-semibold text-white">Malaysian Bok Choy</p>
+                <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Active Crop</p>
+                <p className="text-base font-semibold text-slate-900 dark:text-white">{activeProfile}</p>
               </div>
             </div>
 
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <span className="text-sm font-medium text-slate-300">Growth Cycle</span>
-                <span className="text-sm font-bold text-cyan-400">82%</span>
+                <span className="text-sm font-medium text-slate-600 dark:text-slate-300">Growth Cycle</span>
+                <span className="text-sm font-bold text-cyan-600 dark:text-cyan-400">{currentCropData.growth}%</span>
               </div>
-              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
+              <div className="h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
                 <div 
-                  className="h-full w-[82%] rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-cyan-300 shadow-neon-cyan" 
+                  className="h-full rounded-full bg-gradient-to-r from-purple-500 via-cyan-500 to-cyan-400 dark:from-purple-500 dark:via-cyan-400 dark:to-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.4)] dark:shadow-neon-cyan transition-all duration-1000 ease-out" 
+                  style={{ width: `${currentCropData.growth}%` }}
                 />
               </div>
             </div>
 
-            <div className="rounded-2xl border border-purple-500/20 bg-purple-500/5 p-5 text-center transition-colors hover:bg-purple-500/10">
-              <p className="text-xs font-medium uppercase tracking-wider text-purple-400/80">
+            <div className="rounded-2xl border border-purple-500/20 bg-purple-50 dark:bg-purple-500/5 p-5 text-center transition-colors hover:bg-purple-100 dark:hover:bg-purple-500/10">
+              <p className="text-xs font-medium uppercase tracking-wider text-purple-600/80 dark:text-purple-400/80">
                 Estimated Yield
               </p>
-              <p className="mt-1 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent">
-                14.5 kg
+              <p className="mt-1 bg-gradient-to-r from-purple-600 to-cyan-600 dark:from-purple-400 dark:to-cyan-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent">
+                {currentCropData.yield}
               </p>
             </div>
           </div>
         </div>
 
         {/* Bottom Right - System Anomaly Log */}
-        <div className="flex flex-col rounded-3xl border border-slate-800 bg-slate-900/30 p-6 backdrop-blur-md lg:col-span-6">
+        <div className="flex flex-col rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800 dark:bg-slate-900/30 p-6 backdrop-blur-md lg:col-span-6 shadow-lg dark:shadow-none transition-colors">
           <div className="mb-4 flex items-center gap-2">
-            <AlertCircle className="h-5 w-5 text-amber-400" />
-            <h2 className="text-lg font-semibold text-slate-200">
+            <AlertCircle className="h-5 w-5 text-amber-500 dark:text-amber-400" />
+            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">
               System Anomaly Log
             </h2>
           </div>
@@ -294,20 +306,20 @@ export default function Analytics() {
               {anomalyLogs.map((log, index) => (
                 <div 
                   key={index} 
-                  className="relative pl-4 border-l-2 border-slate-700/50 pb-4 last:border-0 last:pb-0"
+                  className="relative pl-4 border-l-2 border-slate-200 dark:border-slate-700/50 pb-4 last:border-0 last:pb-0"
                 >
                   {/* Timeline dot */}
-                  <div className="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-slate-600 ring-4 ring-slate-900/30"></div>
+                  <div className="absolute -left-[5px] top-1.5 h-2 w-2 rounded-full bg-slate-400 dark:bg-slate-600 ring-4 ring-white dark:ring-slate-900/30"></div>
                   
                   <div className="flex flex-col gap-1">
                     <span className="text-[10px] font-mono font-medium tracking-widest text-slate-500">
                       [{log.time}]
                     </span>
-                    <span className="text-sm font-semibold text-slate-200">
+                    <span className="text-sm font-semibold text-slate-800 dark:text-slate-200">
                       {log.action}
                     </span>
-                    <span className="text-xs text-slate-400">
-                      Reason: <span className="text-amber-400/80">{log.reason}</span>
+                    <span className="text-xs text-slate-600 dark:text-slate-400">
+                      Reason: <span className="text-amber-600/80 dark:text-amber-400/80">{log.reason}</span>
                     </span>
                   </div>
                 </div>
@@ -315,7 +327,7 @@ export default function Analytics() {
             </div>
           </div>
           
-          <button className="mt-4 w-full rounded-xl border border-slate-700 bg-slate-950/40 py-2.5 text-xs font-medium text-slate-400 transition hover:bg-slate-800 hover:text-white">
+          <button className="mt-4 w-full rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/40 py-2.5 text-xs font-medium text-slate-600 dark:text-slate-400 transition hover:bg-slate-100 hover:text-slate-900 dark:hover:bg-slate-800 dark:hover:text-white">
             View Full Logs
           </button>
         </div>

@@ -7,13 +7,17 @@
     @apply scroll-smooth;
   }
   body {
-    @apply bg-slate-950 text-slate-100 min-h-screen;
+    @apply bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 min-h-screen transition-colors duration-300;
   }
 }
 
-/* Thin dark scrollbar (mobile / overflow areas) */
+/* Thin scrollbar (mobile / overflow areas) */
 .scroll-bento {
   scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225) rgb(248 250 252);
+}
+
+.dark .scroll-bento {
   scrollbar-color: rgb(51 65 85) rgb(15 23 42);
 }
 
@@ -22,9 +26,9 @@
 }
 
 .scroll-bento::-webkit-scrollbar-track {
-  @apply rounded-full bg-slate-950;
+  @apply rounded-full bg-slate-100 dark:bg-slate-950;
 }
 
 .scroll-bento::-webkit-scrollbar-thumb {
-  @apply rounded-full bg-slate-700;
+  @apply rounded-full bg-slate-300 dark:bg-slate-700;
 }

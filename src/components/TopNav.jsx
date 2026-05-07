@@ -39,8 +39,8 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
     ];
 
     return (
-    <header className="sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur-md md:px-6">
-      <h1 className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-lg font-bold tracking-tight text-transparent md:text-xl">
+    <header className="sticky top-0 z-50 flex shrink-0 items-center justify-between gap-3 border-b border-slate-200 bg-white/80 dark:border-slate-800/80 dark:bg-slate-900/80 px-4 py-3 backdrop-blur-md md:px-6 transition-colors">
+      <h1 className="bg-gradient-to-r from-cyan-600 to-emerald-500 dark:from-cyan-400 dark:to-emerald-400 bg-clip-text text-lg font-bold tracking-tight text-transparent md:text-xl">
         VertiSync
       </h1>
 
@@ -53,20 +53,20 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
                 }}
                 className={`flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm transition-all ${
                     showProfileMenu
-                        ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400 shadow-neon'
-                        : 'border-slate-700/80 bg-slate-900/70 text-slate-300 hover:border-slate-600'
+                        ? 'border-emerald-500/50 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon'
+                        : 'border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/70 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600'
                 }`}
             >
-                <span className={showProfileMenu ? "text-emerald-500/70" : "text-slate-500"}>Active Profile:</span>
+                <span className={showProfileMenu ? "text-emerald-600/70 dark:text-emerald-500/70" : "text-slate-500"}>Active Profile:</span>
                 <span className="font-medium">{globalActiveProfile}</span>
-                <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${showProfileMenu ? 'rotate-180 text-emerald-400' : 'text-slate-500'}`} aria-hidden />
+                <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${showProfileMenu ? 'rotate-180 text-emerald-500 dark:text-emerald-400' : 'text-slate-500'}`} aria-hidden />
             </button>
 
             {/* Profile Dropdown Panel */}
             {showProfileMenu && (
-                <div className="absolute top-full mt-2 w-72 rounded-2xl border border-slate-800/80 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl z-50">
+                <div className="absolute top-full mt-2 w-72 rounded-2xl border border-slate-200 bg-white/95 dark:border-slate-800/80 dark:bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl z-50 transition-colors">
                     <div className="mb-2 px-3 pt-2">
-                        <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Select Edge Node Recipe</h3>
+                        <h3 className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Select Edge Node Recipe</h3>
                     </div>
 
                     <div className="flex max-h-60 flex-col gap-1 overflow-y-auto pr-1">
@@ -79,11 +79,11 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
                                 }}
                                 className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left ${
                                     globalActiveProfile === crop.name
-                                        ? 'bg-emerald-500/10 text-emerald-400'
-                                        : 'text-slate-300 hover:bg-slate-800/60 hover:text-white'
+                                        ? 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                                        : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
                                 }`}
                             >
-                                <Sprout className={`h-4 w-4 shrink-0 ${globalActiveProfile === crop.name ? 'text-emerald-400' : 'text-slate-500'}`} />
+                                <Sprout className={`h-4 w-4 shrink-0 ${globalActiveProfile === crop.name ? 'text-emerald-500 dark:text-emerald-400' : 'text-slate-400 dark:text-slate-500'}`} />
                                 <span className="truncate text-sm font-medium">{crop.name}</span>
                             </button>
                         ))}
@@ -103,8 +103,8 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
                 }}
                 className={`relative rounded-xl border p-2.5 transition ${
                     showNotifications
-                        ? 'border-cyan-500/50 bg-cyan-500/10 text-cyan-400 shadow-neon-cyan'
-                        : 'border-slate-800 bg-slate-900/60 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                        ? 'border-cyan-500/50 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shadow-sm dark:shadow-neon-cyan'
+                        : 'border-slate-300 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-400 hover:border-slate-400 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-slate-200'
                 }`}
                 aria-label="Notifications"
             >
@@ -119,30 +119,30 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
 
             {/* DROPDOWN PANEL */}
             {showNotifications && (
-                <div className="absolute right-12 top-full mt-2 w-80 rounded-2xl border border-slate-800/80 bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl sm:right-0">
+                <div className="absolute right-12 top-full mt-2 w-80 rounded-2xl border border-slate-200 bg-white/95 dark:border-slate-800/80 dark:bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl sm:right-0 transition-colors">
                     <div className="mb-2 px-3 pt-2">
-                        <h3 className="text-sm font-semibold text-slate-200">Predictive Alerts</h3>
+                        <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200">Predictive Alerts</h3>
                     </div>
 
                     <div className="flex max-h-[70vh] flex-col gap-1 overflow-y-auto">
                         {notifications.map((note) => (
-                            <div key={note.id} className="flex items-start gap-3 rounded-xl p-3 transition hover:bg-slate-800/50 cursor-pointer">
-                                <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-800/60 ${note.bg}`}>
+                            <div key={note.id} className="flex items-start gap-3 rounded-xl p-3 transition hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer">
+                                <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800/60 ${note.bg}`}>
                                     <note.icon className={`h-4 w-4 ${note.color}`} />
                                 </div>
                                 <div className="flex-1 space-y-1">
                                     <div className="flex items-center justify-between">
-                                        <p className="text-sm font-medium text-slate-200">{note.title}</p>
+                                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{note.title}</p>
                                         <span className="text-[10px] text-slate-500">{note.time}</span>
                                     </div>
-                                    <p className="text-xs text-slate-400">{note.desc}</p>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400">{note.desc}</p>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    <div className="mt-2 border-t border-slate-800/80 px-2 pt-2">
-                        <button className="w-full rounded-lg py-2 text-center text-xs font-medium text-cyan-400 transition hover:bg-cyan-400/10 hover:text-cyan-300">
+                    <div className="mt-2 border-t border-slate-200 dark:border-slate-800/80 px-2 pt-2">
+                        <button className="w-full rounded-lg py-2 text-center text-xs font-medium text-cyan-600 dark:text-cyan-400 transition hover:bg-cyan-50 dark:hover:bg-cyan-400/10 hover:text-cyan-700 dark:hover:text-cyan-300">
                             View Alert History
                         </button>
                     </div>
@@ -155,8 +155,8 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
                 onClick={onMenuClick}
                 className={`rounded-xl border p-2.5 md:hidden ${
                     sidebarOpen
-                        ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-400 shadow-neon'
-                        : 'border-slate-800 bg-slate-900/60 text-slate-300'
+                        ? 'border-emerald-500/50 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon'
+                        : 'border-slate-300 bg-slate-50 text-slate-600 dark:border-slate-800 dark:bg-slate-900/60 dark:text-slate-300'
                 }`}
                 aria-expanded={sidebarOpen}
                 aria-label="Open menu"
