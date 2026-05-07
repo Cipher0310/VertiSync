@@ -9,7 +9,6 @@ export const plantProfiles = [
         lightCycle: "16 Hours ON",
         stage: "Seedling",
         estimatedHarvestDays: 30,
-        nutrientAdvice: "Increase Nitrogen solution by 5ml/L for optimal broad leaf growth.",
         difficulty: "Beginner",
         npkRatio: { n: 60, p: 15, k: 25 },
         topThreat: "Flea Beetles"
@@ -23,7 +22,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Seedling",
         estimatedHarvestDays: 35,
-        nutrientAdvice: "Maintain balanced NPK. Do not over-saturate roots.",
         difficulty: "Intermediate",
         npkRatio: { n: 50, p: 20, k: 30 },
         topThreat: "Pythium Root Rot"
@@ -37,7 +35,6 @@ export const plantProfiles = [
         lightCycle: "12 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 45,
-        nutrientAdvice: "Maintain EC at 1.2. Ensure adequate calcium to prevent tip burn.",
         difficulty: "Beginner",
         npkRatio: { n: 65, p: 15, k: 20 },
         topThreat: "Aphids"
@@ -51,7 +48,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Harvest Ready",
         estimatedHarvestDays: 2,
-        nutrientAdvice: "Commence pure water flush. Halt all nutrient dosing prior to harvest.",
         difficulty: "Beginner",
         npkRatio: { n: 60, p: 15, k: 25 },
         topThreat: "Tip Burn (Calcium Deficiency)"
@@ -65,7 +61,6 @@ export const plantProfiles = [
         lightCycle: "10 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 50,
-        nutrientAdvice: "Introduce Calcium-rich NPK blend to support rigid cellular structure.",
         difficulty: "Intermediate",
         npkRatio: { n: 60, p: 15, k: 25 },
         topThreat: "Cabbage Worms"
@@ -79,7 +74,6 @@ export const plantProfiles = [
         lightCycle: "12 Hours ON",
         stage: "Seedling",
         estimatedHarvestDays: 30,
-        nutrientAdvice: "Keep EC strictly below 1.2 to prevent excessive bitter compounds.",
         difficulty: "Beginner",
         npkRatio: { n: 70, p: 10, k: 20 },
         topThreat: "Flea Beetles"
@@ -93,7 +87,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 45,
-        nutrientAdvice: "High magnesium required for vibrant stem coloration.",
         difficulty: "Intermediate",
         npkRatio: { n: 55, p: 20, k: 25 },
         topThreat: "Leaf Miners"
@@ -109,7 +102,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 28,
-        nutrientAdvice: "Steady Nitrogen supply required. Avoid high EC levels to prevent tip burn.",
         difficulty: "Beginner",
         npkRatio: { n: 55, p: 25, k: 20 },
         topThreat: "Downy Mildew"
@@ -123,7 +115,6 @@ export const plantProfiles = [
         lightCycle: "12 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 35,
-        nutrientAdvice: "Lower temperatures critical to prevent premature bolting.",
         difficulty: "Intermediate",
         npkRatio: { n: 60, p: 15, k: 25 },
         topThreat: "Root Rot"
@@ -137,7 +128,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Harvest Ready",
         estimatedHarvestDays: 5,
-        nutrientAdvice: "Aggressive grower. Monitor root zone to ensure pipes are not blocked.",
         difficulty: "Beginner",
         npkRatio: { n: 65, p: 15, k: 20 },
         topThreat: "Spider Mites"
@@ -151,7 +141,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 60,
-        nutrientAdvice: "Requires low EC (0.8 - 1.2). Do not overfeed.",
         difficulty: "Intermediate",
         npkRatio: { n: 40, p: 30, k: 30 },
         topThreat: "Botrytis (Gray Mold)"
@@ -165,7 +154,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 45,
-        nutrientAdvice: "Keep humidity low to concentrate essential oils in leaves.",
         difficulty: "Intermediate",
         npkRatio: { n: 50, p: 25, k: 25 },
         topThreat: "Aphids"
@@ -181,7 +169,6 @@ export const plantProfiles = [
         lightCycle: "18 Hours ON",
         stage: "Flowering",
         estimatedHarvestDays: 65,
-        nutrientAdvice: "Switch to High-Phosphorus blend to support blossom development.",
         difficulty: "Advanced",
         npkRatio: { n: 30, p: 30, k: 40 },
         topThreat: "Blossom End Rot"
@@ -195,7 +182,6 @@ export const plantProfiles = [
         lightCycle: "16 Hours ON",
         stage: "Fruiting",
         estimatedHarvestDays: 75,
-        nutrientAdvice: "Increase Magnesium and Potassium reserves; begin tapering off Nitrogen.",
         difficulty: "Advanced",
         npkRatio: { n: 25, p: 35, k: 40 },
         topThreat: "Spider Mites"
@@ -209,7 +195,6 @@ export const plantProfiles = [
         lightCycle: "16 Hours ON",
         stage: "Fruiting",
         estimatedHarvestDays: 85,
-        nutrientAdvice: "High Potassium demand during fruit swell. Monitor EC spikes.",
         difficulty: "Advanced",
         npkRatio: { n: 20, p: 30, k: 50 },
         topThreat: "Whiteflies"
@@ -223,7 +208,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Flowering",
         estimatedHarvestDays: 90,
-        nutrientAdvice: "Strict EC management (1.0 - 1.4) to prevent fruit deformation.",
         difficulty: "Advanced",
         npkRatio: { n: 20, p: 30, k: 50 },
         topThreat: "Botrytis (Fruit Rot)"
@@ -237,7 +221,6 @@ export const plantProfiles = [
         lightCycle: "14 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 55,
-        nutrientAdvice: "Extremely fast growth requires heavy feeding schedule (EC 1.8-2.5).",
         difficulty: "Advanced",
         npkRatio: { n: 40, p: 20, k: 40 },
         topThreat: "Powdery Mildew"
@@ -253,7 +236,6 @@ export const plantProfiles = [
         lightCycle: "12 Hours ON",
         stage: "Sprouting",
         estimatedHarvestDays: 10,
-        nutrientAdvice: "Zero nutrient solution required. Mist gently with pH-balanced pure water.",
         difficulty: "Beginner",
         npkRatio: { n: 0, p: 0, k: 0 },
         topThreat: "Damping Off (Fungus)"
@@ -267,7 +249,6 @@ export const plantProfiles = [
         lightCycle: "12 Hours ON",
         stage: "Sprouting",
         estimatedHarvestDays: 8,
-        nutrientAdvice: "Blackout dome required for first 3 days to encourage stem stretch.",
         difficulty: "Beginner",
         npkRatio: { n: 0, p: 0, k: 0 },
         topThreat: "Mold"
@@ -281,7 +262,6 @@ export const plantProfiles = [
         lightCycle: "12 Hours ON",
         stage: "Vegetative",
         estimatedHarvestDays: 45,
-        nutrientAdvice: "Requires high iron levels and heavily oxygenated water.",
         difficulty: "Intermediate",
         npkRatio: { n: 50, p: 20, k: 30 },
         topThreat: "Snail Infestation"
