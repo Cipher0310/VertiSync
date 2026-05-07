@@ -5,7 +5,7 @@ import {
     Search, ArrowUpDown, ChevronDown, Cpu, CheckCircle2,
     Calculator, Zap, Leaf
 } from 'lucide-react';
-//test
+
 import { plantProfiles } from '../data/plantProfile.js';
 
 export default function PlantDatabase({setGlobalActiveProfile}) {
