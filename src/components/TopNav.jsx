@@ -39,7 +39,7 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
     ];
 
     return (
-    <header className="sticky top-0 z-30 flex shrink-0 items-center justify-between gap-3 border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur-md md:px-6">
+    <header className="sticky top-0 z-50 flex shrink-0 items-center justify-between gap-3 border-b border-slate-800/80 bg-slate-900/80 px-4 py-3 backdrop-blur-md md:px-6">
       <h1 className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-lg font-bold tracking-tight text-transparent md:text-xl">
         VertiSync
       </h1>

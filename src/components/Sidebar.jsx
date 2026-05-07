@@ -26,7 +26,7 @@ export default function Sidebar({ open, onClose, currentView, onNavigate }) {
       />
 
       <aside
-        className={`fixed left-0 top-0 z-50 flex h-full w-[min(280px,85vw)] flex-col border-r border-slate-800/80 bg-slate-900/95 shadow-xl backdrop-blur-md transition-transform duration-200 ease-out md:static md:z-0 md:w-64 md:translate-x-0 md:border-r md:bg-slate-900/50 md:shadow-none ${
+        className={`fixed left-0 top-0 z-50 flex h-full w-[min(280px,85vw)] shrink-0 flex-col overflow-y-auto border-r border-slate-800/80 bg-slate-900/95 shadow-xl backdrop-blur-md transition-transform duration-200 ease-out md:static md:z-0 md:w-72 md:translate-x-0 md:border-r md:bg-slate-900/50 md:shadow-none ${
           open ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
         }`}
       >
@@ -36,7 +36,7 @@ export default function Sidebar({ open, onClose, currentView, onNavigate }) {
           </span>
         </div>
 
-        <nav className="flex-1 space-y-1 p-3 md:pt-6">
+        <nav className="flex-1 space-y-2 p-4 md:pt-6">
           {nav.map((item) => {
             const Icon = item.icon;
 
@@ -53,13 +53,13 @@ export default function Sidebar({ open, onClose, currentView, onNavigate }) {
                       if (onNavigate) onNavigate(item.id);
                       onClose();
                     }}
-                    className={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition ${
+                    className={`flex items-center gap-4 rounded-2xl px-4 py-3.5 text-base font-medium transition ${
                         active
                             ? 'border border-emerald-500/40 bg-emerald-500/10 text-emerald-400 shadow-neon'
                             : 'border border-transparent text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                     }`}
                 >
-                  <Icon className="h-5 w-5 shrink-0 opacity-90" strokeWidth={1.75} />
+                  <Icon className="h-6 w-6 shrink-0 opacity-90" strokeWidth={1.75} />
                   {item.label}
                 </a>
             );

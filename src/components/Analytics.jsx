@@ -9,8 +9,19 @@ import {
   AlertCircle
 } from 'lucide-react';
 
-export default function Analytics() {
+export default function Analytics({ activeProfile = 'Malaysian Bok Choy' }) {
   const [activeChartToggle, setActiveChartToggle] = useState('Water'); // 'Water' or 'Electricity'
+
+  // Mock data for AI Harvest Prediction based on activeProfile
+  const profileData = {
+    'Hydroponic Spinach': { yield: '11.2 kg', growth: 76 },
+    'Malaysian Bok Choy': { yield: '14.5 kg', growth: 82 },
+    'Microgreens Blend': { yield: '3.8 kg', growth: 95 },
+    'Cherry Tomatoes': { yield: '8.4 kg', growth: 45 },
+    'Sweet Basil': { yield: '6.2 kg', growth: 60 }
+  };
+
+  const currentCropData = profileData[activeProfile] || { yield: '12.0 kg', growth: 50 };
 
   // Chronologically sorted mock data for the 30-day trend chart
   const consumptionData = [
@@ -253,18 +264,19 @@ export default function Analytics() {
               </div>
               <div>
                 <p className="text-xs font-medium text-slate-400">Active Crop</p>
-                <p className="text-base font-semibold text-white">Malaysian Bok Choy</p>
+                <p className="text-base font-semibold text-white">{activeProfile}</p>
               </div>
             </div>
 
             <div>
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-medium text-slate-300">Growth Cycle</span>
-                <span className="text-sm font-bold text-cyan-400">82%</span>
+                <span className="text-sm font-bold text-cyan-400">{currentCropData.growth}%</span>
               </div>
               <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
                 <div 
-                  className="h-full w-[82%] rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-cyan-300 shadow-neon-cyan" 
+                  className="h-full rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-cyan-300 shadow-neon-cyan transition-all duration-1000 ease-out" 
+                  style={{ width: `${currentCropData.growth}%` }}
                 />
               </div>
             </div>
@@ -274,7 +286,7 @@ export default function Analytics() {
                 Estimated Yield
               </p>
               <p className="mt-1 bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-4xl font-bold tracking-tight text-transparent">
-                14.5 kg
+                {currentCropData.yield}
               </p>
             </div>
           </div>

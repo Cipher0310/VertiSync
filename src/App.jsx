@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     Droplets,
     Fan,
@@ -11,7 +11,7 @@ import {
 import Sidebar from './components/Sidebar.jsx';
 import TopNav from './components/TopNav.jsx';
 import HeroMetricCard from './components/HeroMetricCard.jsx';
-import ChartRow from './components/ChartRow.jsx';
+
 import PlantDatabase from './components/plantDatabase.jsx';
 import HardwareDiagnostics from './components/HardwareDiagnostics.jsx';
 import Analytics from './components/Analytics.jsx';
@@ -69,6 +69,35 @@ export default function App() {
     const [isPumpActive, setIsPumpActive] = useState(false);
     const [harvestState, setHarvestState] = useState('idle');
 
+    const [moistureHistory, setMoistureHistory] = useState(() => Array(30).fill(38));
+    const [currentTemp, setCurrentTemp] = useState(24);
+    const [tempHistory, setTempHistory] = useState(() => Array(30).fill(24));
+
+    const currentMoistureRef = useRef(currentMoisture);
+    const currentTempRef = useRef(currentTemp);
+    useEffect(() => {
+        currentMoistureRef.current = currentMoisture;
+        currentTempRef.current = currentTemp;
+    }, [currentMoisture, currentTemp]);
+
+    useEffect(() => {
+        const historyTimer = setInterval(() => {
+            setMoistureHistory((prev) => [...prev.slice(1), currentMoistureRef.current]);
+            setTempHistory((prev) => [...prev.slice(1), currentTempRef.current]);
+        }, 1000);
+        return () => clearInterval(historyTimer);
+    }, []);
+
+    useEffect(() => {
+        const tempTimer = setInterval(() => {
+            setCurrentTemp((prev) => {
+                const change = (Math.random() - 0.5) * 0.4;
+                return Math.max(20, Math.min(30, prev + change));
+            });
+        }, 2000);
+        return () => clearInterval(tempTimer);
+    }, []);
+
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
         return localStorage.getItem('vertiSync_auth') === 'true';
     });
@@ -109,7 +138,7 @@ export default function App() {
           {!isAuthenticated ? (
               <AuthScreen onLoginSuccess={() => setIsAuthenticated(true)} />
           ) : (
-              <div className="flex min-h-screen bg-slate-950">
+              <div className="flex h-screen w-full overflow-hidden bg-slate-950 text-white">
                   {/* PASS THE ROUTING PROPS TO THE SIDEBAR */}
                   <Sidebar
                       open={sidebarOpen}
@@ -118,7 +147,7 @@ export default function App() {
                       onNavigate={setCurrentView}
                   />
 
-                  <div className="flex min-h-screen min-w-0 flex-1 flex-col md:pl-0">
+                  <div className="flex h-full min-w-0 flex-1 flex-col overflow-y-auto md:pl-0">
                       <TopNav
                           onMenuClick={() => setSidebarOpen((o) => !o)}
                           sidebarOpen={sidebarOpen}
@@ -126,7 +155,7 @@ export default function App() {
                           setGlobalActiveProfile={setGlobalActiveProfile}
                       />
 
-                      <div className="scroll-bento flex-1 overflow-y-auto px-4 pb-8 pt-4 md:px-6 md:pt-5">
+                      <div className="scroll-bento flex-1 px-4 pb-8 pt-4 md:px-6 md:pt-5">
                           <div className="mx-auto max-w-[1400px]">
                               {/* Desktop subheader: pump status */}
                               <div className="mb-4 hidden items-center justify-end md:flex">
@@ -163,7 +192,99 @@ export default function App() {
                                               </div>
 
                                               <div className="mt-5 rounded-2xl border border-slate-800/60 bg-slate-950/40 px-3 py-2">
-                                                  <ChartRow />
+                                                  <div className="relative w-full">
+                                                      <svg
+                                                          viewBox="0 0 320 72"
+                                                          className="w-full h-16 md:h-[4.5rem]"
+                                                          preserveAspectRatio="none"
+                                                          aria-hidden
+                                                      >
+                                                          <defs>
+                                                              <filter id="chartGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                                                  <feGaussianBlur stdDeviation="2" result="blur" />
+                                                                  <feMerge>
+                                                                      <feMergeNode in="blur" />
+                                                                      <feMergeNode in="SourceGraphic" />
+                                                                  </feMerge>
+                                                              </filter>
+                                                          </defs>
+                                                          <polyline
+                                                              points={moistureHistory.map((val, i) => {
+                                                                  const pad = 4;
+                                                                  const w = 320;
+                                                                  const h = 72;
+                                                                  const step = (w - pad * 2) / Math.max(1, moistureHistory.length - 1);
+                                                                  const x = pad + i * step;
+                                                                  const y = pad + (1 - val / 100) * (h - pad * 2);
+                                                                  return `${x.toFixed(1)},${y.toFixed(1)}`;
+                                                              }).join(' ')}
+                                                              fill="none"
+                                                              stroke="#00E5FF"
+                                                              strokeWidth="2"
+                                                              strokeLinecap="round"
+                                                              strokeLinejoin="round"
+                                                              filter="url(#chartGlow)"
+                                                              className="drop-shadow-[0_0_8px_rgba(0,229,255,0.45)]"
+                                                          />
+                                                      </svg>
+                                                  </div>
+                                              </div>
+
+                                              {/* Current Temperature Box */}
+                                              <div className="relative mt-8 overflow-hidden rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900 via-slate-950 to-purple-950/40 p-8">
+                                                  <div className="flex flex-col items-center text-center">
+                                                      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-purple-500/30 bg-purple-500/10 text-purple-300 shadow-neon-purple">
+                                                          <Thermometer className="h-9 w-9" strokeWidth={1.5} />
+                                                      </div>
+                                                      <p className="text-sm text-slate-400">
+                                                          Current Temperature
+                                                      </p>
+                                                      <p className="mt-1 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-5xl font-bold tracking-tight text-transparent md:text-6xl">
+                                                          {currentTemp.toFixed(1)}°C
+                                                      </p>
+                                                  </div>
+                                              </div>
+
+                                              <div className="mt-5 rounded-2xl border border-slate-800/60 bg-slate-950/40 px-3 py-2">
+                                                  <div className="relative w-full">
+                                                      <svg
+                                                          viewBox="0 0 320 72"
+                                                          className="w-full h-16 md:h-[4.5rem]"
+                                                          preserveAspectRatio="none"
+                                                          aria-hidden
+                                                      >
+                                                          <defs>
+                                                              <filter id="tempChartGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                                                  <feGaussianBlur stdDeviation="2" result="blur" />
+                                                                  <feMerge>
+                                                                      <feMergeNode in="blur" />
+                                                                      <feMergeNode in="SourceGraphic" />
+                                                                  </feMerge>
+                                                              </filter>
+                                                          </defs>
+                                                          <polyline
+                                                              points={tempHistory.map((val, i) => {
+                                                                  const pad = 4;
+                                                                  const w = 320;
+                                                                  const h = 72;
+                                                                  const step = (w - pad * 2) / Math.max(1, tempHistory.length - 1);
+                                                                  const x = pad + i * step;
+                                                                  // Map 20-30 degree range to 0-100% for the chart
+                                                                  const normalized = (val - 20) / 10;
+                                                                  const clamped = Math.max(0, Math.min(1, normalized));
+                                                                  const y = pad + (1 - clamped) * (h - pad * 2);
+                                                                  return `${x.toFixed(1)},${y.toFixed(1)}`;
+                                                              }).join(' ')}
+                                                              fill="none"
+                                                              stroke="#c084fc"
+                                                              strokeWidth="2"
+                                                              strokeLinecap="round"
+                                                              strokeLinejoin="round"
+                                                              filter="url(#tempChartGlow)"
+                                                              className="drop-shadow-[0_0_8px_rgba(192,132,252,0.45)]"
+                                                          />
+                                                      </svg>
+                                                  </div>
                                               </div>
 
                                               <div className="mt-4 flex justify-center md:hidden">
@@ -346,7 +467,7 @@ export default function App() {
                                   <HardwareDiagnostics />
                               ) : currentView === 'analytics' ? (
                                   /* RENDER THE ANALYTICS WHEN SELECTED */
-                                  <Analytics />
+                                  <Analytics activeProfile={globalActiveProfile} />
                               ) : currentView === 'settings' ? (
                                   /* RENDER THE SETTINGS WHEN SELECTED */
                                   <Settings />
