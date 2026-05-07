@@ -227,20 +227,20 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
 
             {/* --- ADMIN FULL CRUD MODAL --- */}
             {isModalOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm px-4 py-6">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-200/80 dark:bg-slate-950/80 backdrop-blur-sm px-4 py-6 transition-colors">
                     {/* Added max-h and overflow-y-auto so the tall form scrolls cleanly */}
-                    <div className="w-full max-w-md rounded-3xl border border-slate-700 bg-slate-900 p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto scroll-bento">
-                        <button onClick={() => setIsModalOpen(false)} className="absolute right-4 top-4 text-slate-400 hover:text-white">
+                    <div className="w-full max-w-md rounded-3xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900 p-6 shadow-2xl relative max-h-[85vh] overflow-y-auto scroll-bento transition-colors">
+                        <button onClick={() => setIsModalOpen(false)} className="absolute right-4 top-4 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white">
                             <X className="h-5 w-5" />
                         </button>
 
                         <div className="mb-6 flex items-center gap-3">
-                            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${isEditing ? 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30'}`}>
+                            <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${isEditing ? 'bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30' : 'bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'}`}>
                                 {isEditing ? <Edit className="h-5 w-5" /> : <Plus className="h-5 w-5" />}
                             </div>
                             <div>
-                                <h2 className="text-xl font-bold text-white">{isEditing ? 'Edit Custom Crop' : 'Add Custom Crop'}</h2>
-                                <p className="text-xs text-slate-400">Full Database Record Management</p>
+                                <h2 className="text-xl font-bold text-slate-900 dark:text-white">{isEditing ? 'Edit Custom Crop' : 'Add Custom Crop'}</h2>
+                                <p className="text-xs text-slate-600 dark:text-slate-400">Full Database Record Management</p>
                             </div>
                         </div>
 
@@ -248,41 +248,41 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                             {/* Basics */}
                             <div className="space-y-4">
                                 <div>
-                                    <label className="text-xs font-medium text-slate-400">Crop Name</label>
-                                    <input required type="text" value={newCrop.name} onChange={(e) => setNewCrop({...newCrop, name: e.target.value})} placeholder="e.g. Heirloom Tomatoes" className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Crop Name</label>
+                                    <input required type="text" value={newCrop.name} onChange={(e) => setNewCrop({...newCrop, name: e.target.value})} placeholder="e.g. Heirloom Tomatoes" className="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                 </div>
                                 <div>
-                                    <label className="text-xs font-medium text-slate-400 flex items-center gap-1"><ImageIcon className="h-3 w-3"/> Image URL (Optional)</label>
-                                    <input type="url" value={newCrop.imageUrl} onChange={(e) => setNewCrop({...newCrop, imageUrl: e.target.value})} placeholder="https://..." className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400 flex items-center gap-1"><ImageIcon className="h-3 w-3"/> Image URL (Optional)</label>
+                                    <input type="url" value={newCrop.imageUrl} onChange={(e) => setNewCrop({...newCrop, imageUrl: e.target.value})} placeholder="https://..." className="mt-1 w-full rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                 </div>
                             </div>
 
                             {/* Environment Thresholds */}
-                            <div className="rounded-xl border border-slate-800 bg-slate-950/30 p-4 space-y-4">
-                                <h3 className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Environmental Targets</h3>
+                            <div className="rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950/30 p-4 space-y-4 transition-colors">
+                                <h3 className="text-[10px] uppercase tracking-widest text-slate-600 dark:text-slate-500 font-bold">Environmental Targets</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-xs font-medium text-slate-400">Target Temp</label>
-                                        <input required type="text" value={newCrop.tempRange} onChange={(e) => setNewCrop({...newCrop, tempRange: e.target.value})} placeholder="20°C - 25°C" className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                        <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Target Temp</label>
+                                        <input required type="text" value={newCrop.tempRange} onChange={(e) => setNewCrop({...newCrop, tempRange: e.target.value})} placeholder="20°C - 25°C" className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-medium text-slate-400">Target pH</label>
-                                        <input required type="text" value={newCrop.phRange} onChange={(e) => setNewCrop({...newCrop, phRange: e.target.value})} placeholder="5.5 - 6.5" className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                        <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Target pH</label>
+                                        <input required type="text" value={newCrop.phRange} onChange={(e) => setNewCrop({...newCrop, phRange: e.target.value})} placeholder="5.5 - 6.5" className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                     </div>
                                 </div>
                                 <div>
-                                    <label className="text-xs font-medium text-slate-400">Light Cycle</label>
-                                    <input required type="text" value={newCrop.lightCycle} onChange={(e) => setNewCrop({...newCrop, lightCycle: e.target.value})} placeholder="16 Hours ON" className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Light Cycle</label>
+                                    <input required type="text" value={newCrop.lightCycle} onChange={(e) => setNewCrop({...newCrop, lightCycle: e.target.value})} placeholder="16 Hours ON" className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                 </div>
                             </div>
 
                             {/* Agronomy & Stats */}
-                            <div className="rounded-xl border border-slate-800 bg-slate-950/30 p-4 space-y-4">
-                                <h3 className="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Agronomy Data</h3>
+                            <div className="rounded-xl border border-slate-200 bg-slate-50 dark:border-slate-800 dark:bg-slate-950/30 p-4 space-y-4 transition-colors">
+                                <h3 className="text-[10px] uppercase tracking-widest text-slate-600 dark:text-slate-500 font-bold">Agronomy Data</h3>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-xs font-medium text-slate-400">Growth Stage</label>
-                                        <select value={newCrop.stage} onChange={(e) => setNewCrop({...newCrop, stage: e.target.value})} className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                                        <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Growth Stage</label>
+                                        <select value={newCrop.stage} onChange={(e) => setNewCrop({...newCrop, stage: e.target.value})} className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none">
                                             <option>Seedling</option>
                                             <option>Vegetative</option>
                                             <option>Flowering</option>
@@ -291,8 +291,8 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                                         </select>
                                     </div>
                                     <div>
-                                        <label className="text-xs font-medium text-slate-400">Difficulty</label>
-                                        <select value={newCrop.difficulty} onChange={(e) => setNewCrop({...newCrop, difficulty: e.target.value})} className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none">
+                                        <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Difficulty</label>
+                                        <select value={newCrop.difficulty} onChange={(e) => setNewCrop({...newCrop, difficulty: e.target.value})} className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none">
                                             <option>Beginner</option>
                                             <option>Intermediate</option>
                                             <option>Advanced</option>
@@ -301,30 +301,30 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
-                                        <label className="text-xs font-medium text-slate-400">Harvest Days</label>
-                                        <input required type="number" min="1" value={newCrop.estimatedHarvestDays} onChange={(e) => setNewCrop({...newCrop, estimatedHarvestDays: e.target.value})} className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                        <label className="text-xs font-medium text-slate-600 dark:text-slate-400">Harvest Days</label>
+                                        <input required type="number" min="1" value={newCrop.estimatedHarvestDays} onChange={(e) => setNewCrop({...newCrop, estimatedHarvestDays: e.target.value})} className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                     </div>
                                     <div>
-                                        <label className="text-xs font-medium text-slate-400 flex items-center gap-1"><Bug className="h-3 w-3"/> Top Threat</label>
-                                        <input type="text" value={newCrop.topThreat} onChange={(e) => setNewCrop({...newCrop, topThreat: e.target.value})} placeholder="e.g. Aphids" className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-950/50 px-3 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                        <label className="text-xs font-medium text-slate-600 dark:text-slate-400 flex items-center gap-1"><Bug className="h-3 w-3"/> Top Threat</label>
+                                        <input type="text" value={newCrop.topThreat} onChange={(e) => setNewCrop({...newCrop, topThreat: e.target.value})} placeholder="e.g. Aphids" className="mt-1 w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 px-3 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                     </div>
                                 </div>
 
                                 {/* NPK Inputs */}
                                 <div>
-                                    <label className="text-xs font-medium text-slate-400 flex items-center gap-1"><FlaskConical className="h-3 w-3"/> N-P-K Ratio (%)</label>
+                                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400 flex items-center gap-1"><FlaskConical className="h-3 w-3"/> N-P-K Ratio (%)</label>
                                     <div className="mt-1 flex gap-2">
                                         <div className="flex flex-col relative w-full">
-                                            <span className="absolute top-2 left-2 text-xs text-emerald-400 font-bold">N</span>
-                                            <input type="number" min="0" max="100" value={newCrop.npkRatio.n} onChange={(e) => setNewCrop({...newCrop, npkRatio: {...newCrop.npkRatio, n: Number(e.target.value)}})} className="w-full rounded-xl border border-slate-700 bg-slate-950/50 pl-6 pr-2 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                            <span className="absolute top-2 left-2 text-xs text-emerald-600 dark:text-emerald-400 font-bold">N</span>
+                                            <input type="number" min="0" max="100" value={newCrop.npkRatio.n} onChange={(e) => setNewCrop({...newCrop, npkRatio: {...newCrop.npkRatio, n: Number(e.target.value)}})} className="w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 pl-6 pr-2 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                         </div>
                                         <div className="flex flex-col relative w-full">
-                                            <span className="absolute top-2 left-2 text-xs text-amber-400 font-bold">P</span>
-                                            <input type="number" min="0" max="100" value={newCrop.npkRatio.p} onChange={(e) => setNewCrop({...newCrop, npkRatio: {...newCrop.npkRatio, p: Number(e.target.value)}})} className="w-full rounded-xl border border-slate-700 bg-slate-950/50 pl-6 pr-2 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                            <span className="absolute top-2 left-2 text-xs text-amber-500 dark:text-amber-400 font-bold">P</span>
+                                            <input type="number" min="0" max="100" value={newCrop.npkRatio.p} onChange={(e) => setNewCrop({...newCrop, npkRatio: {...newCrop.npkRatio, p: Number(e.target.value)}})} className="w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 pl-6 pr-2 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                         </div>
                                         <div className="flex flex-col relative w-full">
-                                            <span className="absolute top-2 left-2 text-xs text-violet-400 font-bold">K</span>
-                                            <input type="number" min="0" max="100" value={newCrop.npkRatio.k} onChange={(e) => setNewCrop({...newCrop, npkRatio: {...newCrop.npkRatio, k: Number(e.target.value)}})} className="w-full rounded-xl border border-slate-700 bg-slate-950/50 pl-6 pr-2 py-2 text-sm text-white focus:border-emerald-500 focus:outline-none" />
+                                            <span className="absolute top-2 left-2 text-xs text-violet-500 dark:text-violet-400 font-bold">K</span>
+                                            <input type="number" min="0" max="100" value={newCrop.npkRatio.k} onChange={(e) => setNewCrop({...newCrop, npkRatio: {...newCrop.npkRatio, k: Number(e.target.value)}})} className="w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 pl-6 pr-2 py-2 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none" />
                                         </div>
                                     </div>
                                 </div>
@@ -339,13 +339,13 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
             )}
 
             {/* --- LEFT PANEL: Crop Library --- */}
-            <section className="flex flex-col rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm lg:w-1/3">
-                <div className="mb-4 flex items-center justify-between border-b border-slate-800/80 pb-4">
+            <section className="flex flex-col rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800/80 dark:bg-slate-900/50 p-5 shadow-lg dark:shadow-xl backdrop-blur-sm transition-colors lg:w-1/3">
+                <div className="mb-4 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-4 transition-colors">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                             <Sprout className="h-5 w-5" />
                         </div>
-                        <h2 className="text-lg font-semibold text-slate-200">Crop Library</h2>
+                        <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Crop Library</h2>
                     </div>
 
                     {isAdmin && (
@@ -368,7 +368,7 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                             placeholder="Search crops..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 placeholder-slate-500 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                            className="w-full rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-800 dark:text-slate-200 placeholder-slate-500 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                         />
                     </div>
 
@@ -379,7 +379,7 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                         <select
                             value={sortOption}
                             onChange={(e) => setSortOption(e.target.value)}
-                            className="w-full appearance-none rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-10 text-sm text-slate-200 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                            className="w-full appearance-none rounded-xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 py-2.5 pl-10 pr-10 text-sm text-slate-800 dark:text-slate-200 transition-all focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                         >
                             <option value="name-asc">Alphabetical (A - Z)</option>
                             <option value="name-desc">Alphabetical (Z - A)</option>
@@ -405,8 +405,8 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                                     onClick={() => setActiveCrop(crop)}
                                     className={`flex items-center justify-between gap-3 rounded-2xl px-4 py-3 text-sm font-medium transition-all relative ${
                                         isActive
-                                            ? 'border border-emerald-500/50 bg-gradient-to-r from-emerald-500/20 to-cyan-500/10 text-emerald-400 shadow-neon'
-                                            : 'border border-slate-800/60 bg-slate-950/30 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                                            ? 'border border-emerald-500/50 bg-gradient-to-r from-emerald-50 dark:from-emerald-500/20 to-cyan-50 dark:to-cyan-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon'
+                                            : 'border border-slate-200 bg-white dark:border-slate-800/60 dark:bg-slate-950/30 text-slate-600 dark:text-slate-400 hover:border-slate-300 hover:text-slate-800 dark:hover:border-slate-700 dark:hover:text-slate-200'
                                     }`}
                                 >
                                     <div className="flex items-center gap-3 truncate">
@@ -414,21 +414,21 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                                             <img
                                                 src={crop.imageUrl}
                                                 alt={crop.name}
-                                                className={`h-8 w-8 shrink-0 rounded-full object-cover border-2 ${isActive ? 'border-emerald-400' : 'border-slate-700'}`}
+                                                className={`h-8 w-8 shrink-0 rounded-full object-cover border-2 ${isActive ? 'border-emerald-500 dark:border-emerald-400' : 'border-slate-200 dark:border-slate-700'}`}
                                             />
                                         ) : (
-                                            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 ${isActive ? 'border-emerald-400 bg-emerald-500/20' : 'border-slate-700 bg-slate-800'}`}>
+                                            <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 ${isActive ? 'border-emerald-500 bg-emerald-50 dark:border-emerald-400 dark:bg-emerald-500/20' : 'border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800'}`}>
                                                 <Sprout className="h-4 w-4" />
                                             </div>
                                         )}
                                         <div className="flex flex-col items-start truncate">
                                             <span className="truncate text-left">{crop.name}</span>
-                                            {isCustom && <span className="text-[9px] text-cyan-400 uppercase tracking-widest mt-0.5">Custom</span>}
+                                            {isCustom && <span className="text-[9px] text-cyan-600 dark:text-cyan-400 uppercase tracking-widest mt-0.5">Custom</span>}
                                         </div>
                                     </div>
 
                                     {(sortOption === 'harvest-asc' || sortOption === 'harvest-desc') && (
-                                        <span className="shrink-0 text-[10px] uppercase tracking-wider text-slate-500 bg-slate-900 px-2 py-1 rounded-md">
+                                        <span className="shrink-0 text-[10px] uppercase tracking-wider text-slate-500 bg-slate-100 dark:bg-slate-900 px-2 py-1 rounded-md">
                                             {crop.estimatedHarvestDays} Days
                                         </span>
                                     )}
@@ -452,20 +452,20 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
             <section className="flex flex-col gap-6 lg:w-2/3">
 
                 {/* CARD 1: AGRONOMY & DEPLOYMENT */}
-                <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm relative">
+                <div className="rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800/80 dark:bg-slate-900/50 p-5 shadow-lg dark:shadow-xl backdrop-blur-sm relative transition-colors">
 
                     {isAdmin && isActiveCropCustom && (
                         <div className="absolute top-5 right-5 flex items-center gap-2">
                             <button
                                 onClick={openEditModal}
-                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-slate-400 transition hover:bg-cyan-500/10 hover:text-cyan-400 hover:border-cyan-500/50"
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 text-slate-500 dark:text-slate-400 transition hover:bg-cyan-50 dark:hover:bg-cyan-500/10 hover:text-cyan-600 dark:hover:text-cyan-400 hover:border-cyan-500/50"
                                 title="Edit Crop"
                             >
                                 <Edit className="h-4 w-4" />
                             </button>
                             <button
                                 onClick={handleDeleteCrop}
-                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-700 bg-slate-800 text-slate-400 transition hover:bg-rose-500/10 hover:text-rose-400 hover:border-rose-500/50"
+                                className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 text-slate-500 dark:text-slate-400 transition hover:bg-rose-50 dark:hover:bg-rose-500/10 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-500/50"
                                 title="Delete Crop"
                             >
                                 <Trash2 className="h-4 w-4" />
@@ -473,76 +473,76 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                         </div>
                     )}
 
-                    <div className="flex items-center gap-5 mb-6 border-b border-slate-800/80 pb-5">
+                    <div className="flex items-center gap-5 mb-6 border-b border-slate-200 dark:border-slate-800/80 pb-5 transition-colors">
                         {activeCrop.imageUrl ? (
                             <img
                                 src={activeCrop.imageUrl}
                                 alt={activeCrop.name}
-                                className="h-20 w-20 rounded-2xl object-cover shadow-lg border border-slate-700"
+                                className="h-20 w-20 rounded-2xl object-cover shadow-md border border-slate-200 dark:border-slate-700"
                             />
                         ) : (
-                            <div className="h-20 w-20 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center shadow-lg">
+                            <div className="h-20 w-20 rounded-2xl bg-slate-50 border border-slate-200 dark:bg-slate-800 dark:border-slate-700 flex items-center justify-center shadow-md">
                                 <Sprout className="h-8 w-8 text-emerald-500/50" />
                             </div>
                         )}
                         <div className="flex-1 pr-16">
                             <div className="flex flex-wrap items-center gap-3">
-                                <h2 className="text-2xl font-bold text-white">{activeCrop.name}</h2>
+                                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{activeCrop.name}</h2>
                                 {activeCrop.difficulty && (
                                     <span className={`px-2.5 py-0.5 rounded-full border text-[10px] font-bold uppercase tracking-wider ${getDifficultyColor(activeCrop.difficulty)}`}>
                                         {activeCrop.difficulty}
                                     </span>
                                 )}
                             </div>
-                            <span className="text-slate-500 font-medium tracking-wide text-sm uppercase flex items-center gap-2 mt-1">
+                            <span className="text-slate-600 dark:text-slate-500 font-medium tracking-wide text-sm uppercase flex items-center gap-2 mt-1">
                                 Agronomy & Target Thresholds
-                                {isActiveCropCustom && <span className="text-[10px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-md border border-cyan-500/30 font-bold">CUSTOM ENTRY</span>}
+                                {isActiveCropCustom && <span className="text-[10px] bg-cyan-50 dark:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 px-2 py-0.5 rounded-md border border-cyan-500/30 font-bold">CUSTOM ENTRY</span>}
                             </span>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div className="flex flex-col items-center rounded-2xl border border-slate-800/80 bg-slate-950/40 p-4 text-center">
-                            <Thermometer className="mb-2 h-6 w-6 text-violet-400" />
+                        <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800/80 dark:bg-slate-950/40 p-4 text-center transition-colors">
+                            <Thermometer className="mb-2 h-6 w-6 text-violet-500 dark:text-violet-400" />
                             <p className="text-xs text-slate-500">Target Temp</p>
-                            <p className="mt-1 text-lg font-bold text-slate-200">{activeCrop.tempRange}</p>
+                            <p className="mt-1 text-lg font-bold text-slate-800 dark:text-slate-200">{activeCrop.tempRange}</p>
                         </div>
-                        <div className="flex flex-col items-center rounded-2xl border border-slate-800/80 bg-slate-950/40 p-4 text-center">
-                            <Droplet className="mb-2 h-6 w-6 text-amber-400" />
+                        <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800/80 dark:bg-slate-950/40 p-4 text-center transition-colors">
+                            <Droplet className="mb-2 h-6 w-6 text-amber-500 dark:text-amber-400" />
                             <p className="text-xs text-slate-500">Target pH</p>
-                            <p className="mt-1 text-lg font-bold text-slate-200">{activeCrop.phRange}</p>
+                            <p className="mt-1 text-lg font-bold text-slate-800 dark:text-slate-200">{activeCrop.phRange}</p>
                         </div>
-                        <div className="flex flex-col items-center rounded-2xl border border-slate-800/80 bg-slate-950/40 p-4 text-center">
-                            <SunMedium className="mb-2 h-6 w-6 text-lime-400" />
+                        <div className="flex flex-col items-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800/80 dark:bg-slate-950/40 p-4 text-center transition-colors">
+                            <SunMedium className="mb-2 h-6 w-6 text-lime-500 dark:text-lime-400" />
                             <p className="text-xs text-slate-500">Light Cycle</p>
-                            <p className="mt-1 text-lg font-bold text-slate-200">{activeCrop.lightCycle}</p>
+                            <p className="mt-1 text-lg font-bold text-slate-800 dark:text-slate-200">{activeCrop.lightCycle}</p>
                         </div>
                     </div>
 
                     {activeCrop.topThreat && activeCrop.npkRatio && (
                         <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
-                            <div className="flex items-center gap-3 rounded-2xl border border-rose-500/20 bg-rose-500/5 p-4">
-                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-500/10 text-rose-400">
+                            <div className="flex items-center gap-3 rounded-2xl border border-rose-500/20 bg-rose-50 dark:bg-rose-500/5 p-4 transition-colors">
+                                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-rose-100 dark:bg-rose-500/10 text-rose-500 dark:text-rose-400">
                                     <Bug className="h-5 w-5" />
                                 </div>
                                 <div>
-                                    <p className="text-xs font-semibold uppercase tracking-wider text-rose-400">Top Bio-Threat</p>
-                                    <p className="text-sm text-slate-300">{activeCrop.topThreat}</p>
+                                    <p className="text-xs font-semibold uppercase tracking-wider text-rose-500 dark:text-rose-400">Top Bio-Threat</p>
+                                    <p className="text-sm text-slate-800 dark:text-slate-300">{activeCrop.topThreat}</p>
                                 </div>
                             </div>
 
-                            <div className="flex flex-col justify-center rounded-2xl border border-slate-800/60 bg-slate-950/40 p-4">
+                            <div className="flex flex-col justify-center rounded-2xl border border-slate-200 bg-white dark:border-slate-800/60 dark:bg-slate-950/40 p-4 transition-colors">
                                 <div className="mb-2 flex items-center gap-2">
-                                    <FlaskConical className="h-4 w-4 text-cyan-400" />
-                                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Nutrient Ratio (N-P-K)</span>
+                                    <FlaskConical className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Nutrient Ratio (N-P-K)</span>
                                 </div>
                                 {activeCrop.npkRatio.n === 0 && activeCrop.npkRatio.p === 0 ? (
                                     <p className="text-sm text-slate-500 italic">Relies on seed energy (Zero nutrients)</p>
                                 ) : (
-                                    <div className="flex h-2 w-full overflow-hidden rounded-full bg-slate-800">
-                                        <div style={{ width: `${activeCrop.npkRatio.n}%` }} className="bg-emerald-400" title="Nitrogen" />
-                                        <div style={{ width: `${activeCrop.npkRatio.p}%` }} className="bg-amber-400" title="Phosphorus" />
-                                        <div style={{ width: `${activeCrop.npkRatio.k}%` }} className="bg-violet-400" title="Potassium" />
+                                    <div className="flex h-2 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+                                        <div style={{ width: `${activeCrop.npkRatio.n}%` }} className="bg-emerald-500 dark:bg-emerald-400" title="Nitrogen" />
+                                        <div style={{ width: `${activeCrop.npkRatio.p}%` }} className="bg-amber-500 dark:bg-amber-400" title="Phosphorus" />
+                                        <div style={{ width: `${activeCrop.npkRatio.k}%` }} className="bg-violet-500 dark:bg-violet-400" title="Potassium" />
                                     </div>
                                 )}
                             </div>
@@ -582,13 +582,13 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                 </div>
 
                 {/* CARD 2: INTERACTIVE AI PREDICTION ENGINE */}
-                <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
+                <div className="rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800/80 dark:bg-slate-900/50 p-5 shadow-lg dark:shadow-xl backdrop-blur-sm transition-colors">
                     <div className="mb-5 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/35 bg-cyan-500/10 text-cyan-300 shadow-neon-cyan">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/35 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 shadow-sm dark:shadow-neon-cyan">
                                 <Sparkles className="h-5 w-5" />
                             </div>
-                            <h2 className="text-lg font-semibold text-slate-200">Dynamic AI Lifecycle Analysis</h2>
+                            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Dynamic AI Lifecycle Analysis</h2>
                         </div>
 
                         <button
@@ -604,63 +604,63 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                         </button>
                     </div>
 
-                    <div className="mb-5 flex gap-4 rounded-2xl border border-slate-700 bg-slate-800/30 p-4 relative overflow-hidden">
+                    <div className="mb-5 flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/30 p-4 relative overflow-hidden transition-colors">
                         <div className="absolute top-2 right-3 flex items-center gap-2">
                           <span className="flex h-2 w-2 relative">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 dark:bg-red-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-red-600 dark:bg-red-500"></span>
                           </span>
                             <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Live Sensor Feed</span>
                         </div>
 
                         <div className="flex flex-1 flex-col justify-center">
-                            <label className="text-xs text-slate-400 mb-1 flex items-center gap-1"><Activity className="w-3 h-3"/> Current Temp</label>
+                            <label className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1"><Activity className="w-3 h-3"/> Current Temp</label>
                             <div className="flex items-center gap-2">
-                                {isEnvLoading ? <Loader2 className="h-5 w-5 animate-spin text-cyan-400" /> : <span className="text-2xl font-mono text-cyan-400">{liveEnv.temp}°C</span>}
+                                {isEnvLoading ? <Loader2 className="h-5 w-5 animate-spin text-cyan-600 dark:text-cyan-400" /> : <span className="text-2xl font-mono text-cyan-600 dark:text-cyan-400">{liveEnv.temp}°C</span>}
                             </div>
                         </div>
 
-                        <div className="w-px bg-slate-700 mx-2"></div>
+                        <div className="w-px bg-slate-300 dark:bg-slate-700 mx-2"></div>
 
                         <div className="flex flex-1 flex-col justify-center">
-                            <label className="text-xs text-slate-400 mb-1 flex items-center gap-1"><Activity className="w-3 h-3"/> Current pH</label>
+                            <label className="text-xs text-slate-500 dark:text-slate-400 mb-1 flex items-center gap-1"><Activity className="w-3 h-3"/> Current pH</label>
                             <div className="flex items-center gap-2">
-                                {isEnvLoading ? <Loader2 className="h-5 w-5 animate-spin text-emerald-400" /> : <span className="text-2xl font-mono text-emerald-400">{liveEnv.ph}</span>}
+                                {isEnvLoading ? <Loader2 className="h-5 w-5 animate-spin text-emerald-600 dark:text-emerald-400" /> : <span className="text-2xl font-mono text-emerald-600 dark:text-emerald-400">{liveEnv.ph}</span>}
                             </div>
                         </div>
 
-                        <button onClick={fetchLiveEnvironment} className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 transition border border-slate-700 my-auto ml-2 group" title="Refresh Sensor Data">
-                            <RefreshCw className="w-4 h-4 text-slate-400 group-hover:text-white" />
+                        <button onClick={fetchLiveEnvironment} className="p-2 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 transition border border-slate-200 dark:border-slate-700 my-auto ml-2 group" title="Refresh Sensor Data">
+                            <RefreshCw className="w-4 h-4 text-slate-500 dark:text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white" />
                         </button>
                     </div>
 
                     <div className="flex flex-col gap-4 relative">
                         {aiStatus === 'standby' && (
-                            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-slate-950/60 backdrop-blur-[2px]">
-                                <p className="text-sm text-cyan-400 tracking-widest uppercase font-medium animate-pulse">Awaiting Analysis</p>
+                            <div className="absolute inset-0 z-10 flex items-center justify-center rounded-2xl bg-white/60 dark:bg-slate-950/60 backdrop-blur-[2px]">
+                                <p className="text-sm text-cyan-600 dark:text-cyan-400 tracking-widest uppercase font-medium animate-pulse">Awaiting Analysis</p>
                             </div>
                         )}
 
-                        <div className="flex items-center justify-between rounded-2xl border border-slate-800/60 bg-slate-950/40 p-5">
+                        <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white dark:border-slate-800/60 dark:bg-slate-950/40 p-5 transition-colors">
                             <div>
                                 <p className="text-xs text-slate-500 uppercase tracking-wide">Growth Phase</p>
-                                <p className="mt-1 text-xl font-bold text-white">{activeCrop.stage || 'Vegetative'}</p>
+                                <p className="mt-1 text-xl font-bold text-slate-900 dark:text-white">{activeCrop.stage || 'Vegetative'}</p>
                             </div>
                             <div className="text-right">
                                 <p className="text-xs text-slate-500 uppercase tracking-wide">Adjusted Harvest</p>
-                                <p className={`mt-1 text-2xl font-bold ${aiStatus === 'complete' ? 'bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent' : 'text-slate-600'}`}>
+                                <p className={`mt-1 text-2xl font-bold ${aiStatus === 'complete' ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent' : 'text-slate-400 dark:text-slate-600'}`}>
                                     {aiStatus === 'complete' ? `${aiResult.days} Days` : '-- Days'}
                                 </p>
                             </div>
                         </div>
 
                         <div className={`rounded-2xl border p-4 transition-all duration-500 ${
-                            aiStatus === 'complete' ? 'border-emerald-500/30 bg-emerald-500/10' : 'border-slate-800 bg-slate-900/40'
+                            aiStatus === 'complete' ? 'border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10' : 'border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900/40'
                         }`}>
-                            <p className={`text-sm font-semibold mb-1 flex items-center gap-2 ${aiStatus === 'complete' ? 'text-emerald-400' : 'text-slate-500'}`}>
+                            <p className={`text-sm font-semibold mb-1 flex items-center gap-2 ${aiStatus === 'complete' ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500'}`}>
                                 System Action Executed:
                             </p>
-                            <p className={aiStatus === 'complete' ? 'text-slate-200 leading-relaxed' : 'text-slate-600'}>
+                            <p className={aiStatus === 'complete' ? 'text-slate-800 dark:text-slate-200 leading-relaxed' : 'text-slate-500 dark:text-slate-600'}>
                                 {aiStatus === 'complete' ? aiResult.advice : "Run analysis to cross-reference target thresholds with live sensor data..."}
                             </p>
                         </div>
@@ -669,58 +669,58 @@ export default function PlantDatabase({setGlobalActiveProfile}) {
                 </div>
 
                 {/* CARD 3: RESOURCE PREDICTOR */}
-                <div className="rounded-3xl border border-slate-800/80 bg-slate-900/50 p-5 shadow-xl backdrop-blur-sm">
+                <div className="rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800/80 dark:bg-slate-900/50 p-5 shadow-lg dark:shadow-xl backdrop-blur-sm transition-colors">
                     <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                                 <Calculator className="h-5 w-5" />
                             </div>
-                            <h2 className="text-lg font-semibold text-slate-200">Resource Consumption Predictor</h2>
+                            <h2 className="text-lg font-semibold text-slate-800 dark:text-slate-200">Resource Consumption Predictor</h2>
                         </div>
 
-                        <div className="flex items-center gap-3 bg-slate-950/50 p-2 rounded-xl border border-slate-700">
-                            <span className="text-xs text-slate-400 uppercase tracking-wider font-semibold pl-2">Planting Slots:</span>
+                        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-950/50 p-2 rounded-xl border border-slate-200 dark:border-slate-700 transition-colors">
+                            <span className="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold pl-2">Planting Slots:</span>
                             <input
                                 type="number"
                                 min="1"
                                 max="10000"
                                 value={farmSize}
                                 onChange={(e) => setFarmSize(e.target.value)}
-                                className="w-20 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1 text-sm text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                                className="w-20 rounded-lg border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-900 px-3 py-1 text-sm text-slate-900 dark:text-white focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                             />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                        <div className="flex flex-col justify-center rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-4 transition-all hover:bg-cyan-500/10">
+                        <div className="flex flex-col justify-center rounded-2xl border border-cyan-500/20 bg-cyan-50 dark:bg-cyan-500/5 p-4 transition-all hover:bg-cyan-100 dark:hover:bg-cyan-500/10">
                             <div className="mb-2 flex items-center gap-2">
-                                <Droplet className="h-4 w-4 text-cyan-400" />
-                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Est. Water / Cycle</span>
+                                <Droplet className="h-4 w-4 text-cyan-600 dark:text-cyan-400" />
+                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Est. Water / Cycle</span>
                             </div>
-                            <p className="text-2xl font-bold text-cyan-400">
+                            <p className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
                                 {totalWater.toLocaleString()} <span className="text-sm font-normal text-slate-500">Liters</span>
                             </p>
                         </div>
 
-                        <div className="flex flex-col justify-center rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4 transition-all hover:bg-amber-500/10">
+                        <div className="flex flex-col justify-center rounded-2xl border border-amber-500/20 bg-amber-50 dark:bg-amber-500/5 p-4 transition-all hover:bg-amber-100 dark:hover:bg-amber-500/10">
                             <div className="mb-2 flex items-center gap-2">
-                                <Zap className="h-4 w-4 text-amber-400" />
-                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Est. Power / Cycle</span>
+                                <Zap className="h-4 w-4 text-amber-500 dark:text-amber-400" />
+                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Est. Power / Cycle</span>
                             </div>
-                            <p className="text-2xl font-bold text-amber-400">
+                            <p className="text-2xl font-bold text-amber-500 dark:text-amber-400">
                                 {totalPower.toLocaleString()} <span className="text-sm font-normal text-slate-500">kWh</span>
                             </p>
                         </div>
 
-                        <div className="flex flex-col justify-center rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4 relative overflow-hidden group">
+                        <div className="flex flex-col justify-center rounded-2xl border border-emerald-500/20 bg-emerald-50 dark:bg-emerald-500/5 p-4 relative overflow-hidden group">
                             <div className="absolute -right-4 -bottom-4 opacity-10 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-12">
-                                <Leaf className="h-24 w-24 text-emerald-400" />
+                                <Leaf className="h-24 w-24 text-emerald-500 dark:text-emerald-400" />
                             </div>
                             <div className="mb-2 flex items-center gap-2 relative z-10">
-                                <Leaf className="h-4 w-4 text-emerald-400" />
-                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-400">Sustainability</span>
+                                <Leaf className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                                <span className="text-xs font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400">Sustainability</span>
                             </div>
-                            <p className="text-lg font-bold text-emerald-400 relative z-10">Saves 90% Water</p>
+                            <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400 relative z-10">Saves 90% Water</p>
                             <p className="text-[10px] text-slate-500 relative z-10 uppercase tracking-widest mt-1">vs. traditional soil farming</p>
                         </div>
                     </div>

@@ -95,37 +95,37 @@ export default function AuthScreen({ onLoginSuccess }) {
     };
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-slate-950 px-4 relative overflow-hidden">
+        <div className="flex min-h-screen items-center justify-center bg-slate-50 dark:bg-slate-950 px-4 relative overflow-hidden transition-colors">
 
             {/* Background Decor */}
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-                <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/10 blur-[100px]"></div>
-                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-cyan-500/10 blur-[120px]"></div>
+                <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-emerald-500/20 dark:bg-emerald-500/10 blur-[100px]"></div>
+                <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full bg-cyan-500/20 dark:bg-cyan-500/10 blur-[120px]"></div>
             </div>
 
             <div className="w-full max-w-md relative z-10">
 
                 {/* Logo Header */}
                 <div className="mb-8 flex flex-col items-center justify-center text-center">
-                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 shadow-neon">
+                    <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-neon">
                         <Sprout className="h-8 w-8" />
                     </div>
-                    <h1 className="bg-gradient-to-r from-cyan-400 to-emerald-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
+                    <h1 className="bg-gradient-to-r from-cyan-600 to-emerald-600 dark:from-cyan-400 dark:to-emerald-400 bg-clip-text text-3xl font-bold tracking-tight text-transparent">
                         VertiSync
                     </h1>
-                    <p className="mt-2 text-sm text-slate-400">
+                    <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
                         Precision Urban Agriculture Platform
                     </p>
                 </div>
 
                 {/* Auth Card */}
-                <div className="rounded-3xl border border-slate-800/80 bg-slate-900/60 p-8 shadow-2xl backdrop-blur-xl">
+                <div className="rounded-3xl border border-slate-200 bg-white/70 dark:border-slate-800/80 dark:bg-slate-900/60 p-8 shadow-2xl backdrop-blur-xl transition-colors">
 
                     <div className="mb-6">
-                        <h2 className="text-xl font-semibold text-white">
+                        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
                             {authMode === 'login' ? 'Welcome Back' : 'Create an Account'}
                         </h2>
-                        <p className="text-sm text-slate-500 mt-1">
+                        <p className="text-sm text-slate-600 dark:text-slate-500 mt-1">
                             {authMode === 'login'
                                 ? 'Enter your credentials to access the dashboard.'
                                 : 'Register to manage your vertical farm data.'}
@@ -133,7 +133,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                     </div>
 
                     {error && (
-                        <div className="mb-6 rounded-xl border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-400 flex items-center gap-2">
+                        <div className="mb-6 rounded-xl border border-rose-500/30 bg-rose-50 dark:bg-rose-500/10 p-3 text-sm text-rose-600 dark:text-rose-400 flex items-center gap-2">
                             <ShieldCheck className="h-4 w-4 shrink-0" />
                             {error}
                         </div>
@@ -144,7 +144,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                         {/* Name Field (Sign Up Only) */}
                         {authMode === 'signup' && (
                             <div>
-                                <label className="mb-1.5 block text-xs font-medium text-slate-400">Full Name</label>
+                                <label className="mb-1.5 block text-xs font-medium text-slate-600 dark:text-slate-400">Full Name</label>
                                 <div className="relative">
                                     <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                         <User className="h-4 w-4 text-slate-500" />
@@ -154,7 +154,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                                         placeholder="e.g. Jane Doe"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                                        className="w-full rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-200 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                                     />
                                 </div>
                             </div>
@@ -162,7 +162,7 @@ export default function AuthScreen({ onLoginSuccess }) {
 
                         {/* Email Field */}
                         <div>
-                            <label className="mb-1.5 block text-xs font-medium text-slate-400">Email Address</label>
+                            <label className="mb-1.5 block text-xs font-medium text-slate-600 dark:text-slate-400">Email Address</label>
                             <div className="relative">
                                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                                     <Mail className="h-4 w-4 text-slate-500" />
@@ -172,7 +172,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                                     placeholder="admin@vertisync.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                                    className="w-full rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-200 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                                 />
                             </div>
                         </div>
@@ -180,9 +180,9 @@ export default function AuthScreen({ onLoginSuccess }) {
                         {/* Password Field */}
                         <div>
                             <div className="mb-1.5 flex items-center justify-between">
-                                <label className="block text-xs font-medium text-slate-400">Password</label>
+                                <label className="block text-xs font-medium text-slate-600 dark:text-slate-400">Password</label>
                                 {authMode === 'login' && (
-                                    <a href="#" className="text-xs text-emerald-400 hover:underline">Forgot password?</a>
+                                    <a href="#" className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">Forgot password?</a>
                                 )}
                             </div>
                             <div className="relative">
@@ -194,7 +194,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                                     placeholder="••••••••"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full rounded-xl border border-slate-700 bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-200 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
+                                    className="w-full rounded-xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 py-2.5 pl-10 pr-4 text-sm text-slate-900 dark:text-slate-200 transition-colors focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/50"
                                 />
                             </div>
                         </div>
@@ -203,10 +203,10 @@ export default function AuthScreen({ onLoginSuccess }) {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 py-3 text-sm font-bold text-slate-950 shadow-neon transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-70 disabled:hover:scale-100"
+                            className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 py-3 text-sm font-bold text-white dark:text-slate-950 shadow-md dark:shadow-neon transition-all hover:scale-[1.02] hover:brightness-110 disabled:opacity-70 disabled:hover:scale-100"
                         >
                             {isLoading ? (
-                                <><Loader2 className="h-4 w-4 animate-spin text-slate-950" /> Authenticating...</>
+                                <><Loader2 className="h-4 w-4 animate-spin text-white dark:text-slate-950" /> Authenticating...</>
                             ) : (
                                 <>{authMode === 'login' ? 'Sign In' : 'Create Account'} <ArrowRight className="h-4 w-4" /></>
                             )}
@@ -214,13 +214,13 @@ export default function AuthScreen({ onLoginSuccess }) {
                     </form>
 
                     {/* Toggle Mode */}
-                    <div className="mt-6 text-center text-sm text-slate-400">
+                    <div className="mt-6 text-center text-sm text-slate-600 dark:text-slate-400">
                         {authMode === 'login' ? (
                             <p>
                                 New to VertiSync?{' '}
                                 <button
                                     onClick={() => {setAuthMode('signup'); setError(''); setPassword('');}}
-                                    className="font-medium text-emerald-400 hover:underline"
+                                    className="font-medium text-emerald-600 dark:text-emerald-400 hover:underline"
                                 >
                                     Sign up here
                                 </button>
@@ -230,7 +230,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                                 Already have an account?{' '}
                                 <button
                                     onClick={() => {setAuthMode('login'); setError(''); setPassword('');}}
-                                    className="font-medium text-emerald-400 hover:underline"
+                                    className="font-medium text-emerald-600 dark:text-emerald-400 hover:underline"
                                 >
                                     Log in here
                                 </button>
@@ -241,7 +241,7 @@ export default function AuthScreen({ onLoginSuccess }) {
                 </div>
 
                 {/* Footer info */}
-                <p className="mt-8 text-center text-xs text-slate-600">
+                <p className="mt-8 text-center text-xs text-slate-500 dark:text-slate-600">
                     UTMxHackathon'26 Prototype • Edge Node v2.4.1
                 </p>
 
