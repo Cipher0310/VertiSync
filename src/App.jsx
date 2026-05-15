@@ -495,6 +495,7 @@ export default function App() {
                                 ) : currentView === 'plants' ? (
                                     /* RENDER THE PLANT DATABASE WHEN SELECTED */
                                     <PlantDatabase 
+                                        activeProfile={globalActiveProfile}
                                         setGlobalActiveProfile={setGlobalActiveProfile} 
                                         currentTemp={currentTemp} 
                                         currentPh={currentPh} 

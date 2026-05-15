@@ -9,7 +9,16 @@ import {
 // Import the default static database
 import { plantProfiles } from '../data/plantProfile.js';
 
-export default function PlantDatabase({setGlobalActiveProfile, currentTemp = 24.0, currentPh = 6.2}) {
+const findPlantByName = (plants, profileName) => {
+    if (!plants?.length) return null;
+    if (profileName) {
+        const match = plants.find((p) => p.name === profileName);
+        if (match) return match;
+    }
+    return plants[0];
+};
+
+export default function PlantDatabase({ activeProfile, setGlobalActiveProfile, currentTemp = 24.0, currentPh = 6.2 }) {
     // --- 1. DYNAMIC DATA STATE ---
     const [customPlants, setCustomPlants] = useState(() => {
         const saved = localStorage.getItem('vs_customPlants');
@@ -22,7 +31,20 @@ export default function PlantDatabase({setGlobalActiveProfile, currentTemp = 24.
     const [sortOption, setSortOption] = useState('name-asc');
 
     const hasData = Array.isArray(allPlants) && allPlants.length > 0;
-    const [activeCrop, setActiveCrop] = useState(hasData ? allPlants[0] : null);
+    const [activeCrop, setActiveCrop] = useState(() => {
+        const saved = localStorage.getItem('vs_customPlants');
+        const custom = saved ? JSON.parse(saved) : [];
+        const plants = [...plantProfiles, ...custom];
+        return findPlantByName(plants, activeProfile);
+    });
+
+    useEffect(() => {
+        if (!activeProfile || !allPlants.length) return;
+        const match = allPlants.find((p) => p.name === activeProfile);
+        if (match) {
+            setActiveCrop((prev) => (prev?.id === match.id ? prev : match));
+        }
+    }, [activeProfile, customPlants]);
 
     const liveEnv = { temp: currentTemp, ph: currentPh };
 
