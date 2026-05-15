@@ -13,6 +13,7 @@ import { ref, onValue } from 'firebase/database';
 import Sidebar from './components/Sidebar.jsx';
 import TopNav from './components/TopNav.jsx';
 import HeroMetricCard from './components/HeroMetricCard.jsx';
+import { plantProfiles } from './data/plantProfile.js';
 
 import PlantDatabase from './components/plantDatabase.jsx';
 import HardwareDiagnostics from './components/HardwareDiagnostics.jsx';
@@ -80,12 +81,17 @@ export default function App() {
 
     const [currentMoisture, setCurrentMoisture] = useState(38);
     const [isPumpActive, setIsPumpActive] = useState(false);
-    const [harvestState, setHarvestState] = useState('idle');
+    const [healthAnalysisStatus, setHealthAnalysisStatus] = useState('idle');
+    const [healthResult, setHealthResult] = useState({ score: 0, status: '', details: [], badgeClass: '', boxClass: '' });
 
     const [moistureHistory, setMoistureHistory] = useState(() => Array(30).fill(38));
     const [currentTemp, setCurrentTemp] = useState(24);
     const [tempHistory, setTempHistory] = useState(() => Array(30).fill(24));
     const [currentHumidity, setCurrentHumidity] = useState(65);
+
+    // AI Prediction States
+    const [evaporationRate, setEvaporationRate] = useState(0.28);
+    const [timeToDryness, setTimeToDryness] = useState('2h 15m');
     const [currentPh, setCurrentPh] = useState(6.2);
 
     const currentMoistureRef = useRef(currentMoisture);
@@ -149,21 +155,129 @@ export default function App() {
         return localStorage.getItem('vertiSync_auth') === 'true';
     });
 
+    // Calculate AI Predictive Dryness
+    useEffect(() => {
+        // Basic AI heuristic model for evaporation
+        const currentHour = new Date().getHours();
+        const isDaytime = currentHour >= 6 && currentHour <= 18;
+        const timeFactor = isDaytime ? 1.2 : 0.8; // Evaporates faster during the day
+        
+        // Evaporation increases with temperature and decreases with humidity
+        const tempFactor = Math.max(0.1, currentTemp / 25);
+        const humidityFactor = Math.max(0.1, 50 / Math.max(1, currentHumidity));
+        
+        // Base rate ~ 0.2% per minute under nominal conditions (25C, 50% hum)
+        const rawRate = 0.2 * tempFactor * humidityFactor * timeFactor;
+        const simulatedRate = Math.max(0.01, parseFloat(rawRate.toFixed(2)));
+        
+        setEvaporationRate(simulatedRate);
+        
+        const CRITICAL_DRYNESS_THRESHOLD = 20; // 20% moisture is considered critically dry
+        const moistureDiff = currentMoisture - CRITICAL_DRYNESS_THRESHOLD;
+        
+        if (moistureDiff <= 0) {
+            setTimeToDryness('Critically Dry');
+        } else {
+            const minutesToDry = moistureDiff / simulatedRate;
+            const hours = Math.floor(minutesToDry / 60);
+            const mins = Math.floor(minutesToDry % 60);
+            
+            if (hours > 72) {
+                setTimeToDryness('> 3 Days');
+            } else {
+                setTimeToDryness(`${hours}h ${mins}m`);
+            }
+        }
+    }, [currentTemp, currentHumidity, currentMoisture]);
+
     // The simulated evaporation and pump timers have been removed 
     // since data is now arriving directly from the ESP32 via Firebase!
 
     const handlePumpStart = () => setIsPumpActive(true);
     const handlePumpEnd = () => setIsPumpActive(false);
 
-    const handleCalculateHarvest = () => {
-        setHarvestState('calculating');
+    const handleRunHealthAnalysis = () => {
+        setHealthAnalysisStatus('analyzing');
+        
         setTimeout(() => {
-            setHarvestState('complete');
-        }, 2500);
+            const savedCustom = JSON.parse(localStorage.getItem('vs_customPlants') || '[]');
+            const allPlants = [...plantProfiles, ...savedCustom];
+            const activeCrop = allPlants.find(p => p.name === globalActiveProfile) || allPlants[0];
+            
+            const tempMatch = activeCrop.tempRange ? activeCrop.tempRange.match(/(\d+)/g) : null;
+            const targetMinTemp = tempMatch ? parseInt(tempMatch[0]) : 20;
+            const targetMaxTemp = tempMatch ? parseInt(tempMatch[1]) : 25;
+            
+            const phMatch = activeCrop.phRange ? activeCrop.phRange.match(/(\d+\.\d+)/g) : null;
+            const targetMinPh = phMatch && phMatch.length >= 2 ? parseFloat(phMatch[0]) : 5.5;
+            const targetMaxPh = phMatch && phMatch.length >= 2 ? parseFloat(phMatch[1]) : 6.5;
+
+            let score = 100;
+            let details = [];
+
+            // Temp Check
+            if (currentTemp > targetMaxTemp) {
+                score -= 15;
+                details.push(`High Temp (${currentTemp.toFixed(1)}°C). Target: <${targetMaxTemp}°C.`);
+            } else if (currentTemp < targetMinTemp) {
+                score -= 15;
+                details.push(`Low Temp (${currentTemp.toFixed(1)}°C). Target: >${targetMinTemp}°C.`);
+            } else {
+                details.push(`Temp optimal.`);
+            }
+
+            // Moisture Check
+            if (currentMoisture < 30) {
+                score -= 20;
+                details.push(`Soil Dry (${currentMoisture}%). Needs irrigation.`);
+            } else if (currentMoisture > 80) {
+                score -= 10;
+                details.push(`Soil very wet (${currentMoisture}%). Allow to drain.`);
+            } else {
+                details.push(`Moisture optimal.`);
+            }
+
+            // pH Check
+            if (currentPh > targetMaxPh) {
+                score -= 10;
+                details.push(`High pH (${currentPh.toFixed(1)}). Target: <${targetMaxPh}.`);
+            } else if (currentPh < targetMinPh) {
+                score -= 10;
+                details.push(`Low pH (${currentPh.toFixed(1)}). Target: >${targetMinPh}.`);
+            } else {
+                details.push(`pH optimal.`);
+            }
+            
+            // Humidity Check (generic)
+            if (currentHumidity < 40) {
+                score -= 5;
+                details.push(`Low humidity (${currentHumidity}%).`);
+            } else if (currentHumidity > 80) {
+                score -= 5;
+                details.push(`High humidity (${currentHumidity}%).`);
+            }
+
+            let status = 'Excellent';
+            let badgeClass = 'text-[#00FF66] border-[#00FF66] bg-[#00FF66]/10';
+            let boxClass = 'border-[#00FF66]/50 bg-emerald-50 dark:bg-slate-950/60 shadow-[0_0_15px_rgba(0,255,102,0.15)]';
+            
+            if (score < 60) {
+                status = 'Critical';
+                badgeClass = 'text-rose-500 border-rose-500 bg-rose-500/10';
+                boxClass = 'border-rose-500/50 bg-rose-50 dark:bg-slate-950/60 shadow-[0_0_15px_rgba(244,63,94,0.15)]';
+            } else if (score < 85) {
+                status = 'Warning';
+                badgeClass = 'text-amber-500 border-amber-500 bg-amber-500/10';
+                boxClass = 'border-amber-500/50 bg-amber-50 dark:bg-slate-950/60 shadow-[0_0_15px_rgba(245,158,11,0.15)]';
+            }
+
+            setHealthResult({ score, status, details, badgeClass, boxClass });
+            setHealthAnalysisStatus('complete');
+        }, 2000);
     };
 
-    const handleResetHarvest = () => {
-        setHarvestState('idle');
+    const handleResetHealthAnalysis = () => {
+        setHealthAnalysisStatus('idle');
     };
 
     return (
@@ -348,64 +462,72 @@ export default function App() {
                                             <p className="mt-5 text-xs font-medium uppercase tracking-wide text-slate-500">
                                                 Estimated Time to Critical Dryness
                                             </p>
-                                            <p className="mt-1 bg-gradient-to-r from-emerald-600 to-cyan-500 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-4xl font-bold text-transparent">
-                                                2h 15m
+                                            <p className={`mt-1 bg-gradient-to-r bg-clip-text text-4xl font-bold text-transparent ${
+                                                timeToDryness === 'Critically Dry' 
+                                                    ? 'from-rose-500 to-orange-500 dark:from-rose-400 dark:to-orange-400' 
+                                                    : 'from-emerald-600 to-cyan-500 dark:from-emerald-400 dark:to-cyan-400'
+                                            }`}>
+                                                {timeToDryness}
                                             </p>
 
                                             <div className="mt-5">
                                                 <div className="flex items-center justify-between text-xs">
                                                     <span className="text-slate-500 dark:text-slate-400">Evaporation Rate</span>
-                                                    <span className="font-mono text-cyan-600 dark:text-cyan-400">0.28%/min</span>
+                                                    <span className="font-mono text-cyan-600 dark:text-cyan-400">{evaporationRate}%/min</span>
                                                 </div>
                                                 <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800 transition-colors">
-                                                    <div className="h-full w-[62%] rounded-full bg-gradient-to-r from-cyan-500 to-emerald-400 dark:from-cyan-400 dark:to-emerald-400 shadow-neon-cyan" />
+                                                    <div 
+                                                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-emerald-400 dark:from-cyan-400 dark:to-emerald-400 shadow-neon-cyan transition-all duration-1000 ease-out" 
+                                                        style={{ width: `${Math.min(100, (evaporationRate / 1.0) * 100)}%` }} 
+                                                    />
                                                 </div>
                                             </div>
 
-                                            {harvestState === 'idle' && (
+                                            {healthAnalysisStatus === 'idle' && (
                                                 <button
                                                     type="button"
-                                                    onClick={handleCalculateHarvest}
+                                                    onClick={handleRunHealthAnalysis}
                                                     className="mt-6 w-full rounded-2xl border border-slate-300 bg-white dark:border-slate-700 dark:bg-slate-950/50 py-3 text-sm font-medium text-slate-600 dark:text-slate-300 transition-all duration-200 hover:border-slate-400 hover:bg-slate-50 dark:hover:border-slate-600 dark:hover:bg-slate-900/80"
                                                 >
-                                                    Calculate Harvest Window
+                                                    Run AI Plant Health Analysis
                                                 </button>
                                             )}
 
-                                            {harvestState === 'calculating' && (
+                                            {healthAnalysisStatus === 'analyzing' && (
                                                 <button
                                                     type="button"
                                                     disabled
                                                     className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-950/50 py-3 text-sm font-medium text-slate-400 transition-all duration-200 cursor-not-allowed"
                                                 >
                                                     <div className="h-4 w-4 animate-[spin_1s_linear_infinite] rounded-full border-2 border-slate-300 dark:border-slate-400 border-t-cyan-500 dark:border-t-cyan-400" />
-                                                    Analyzing Growth Data...
+                                                    Evaluating Crop Condition...
                                                 </button>
                                             )}
 
-                                            {harvestState === 'complete' && (
-                                                <div className="mt-6 rounded-2xl border border-[#00FF66]/50 dark:border-[#00FF66] bg-emerald-50 dark:bg-slate-950/60 p-4 shadow-[0_0_15px_rgba(0,255,102,0.15)] backdrop-blur-md transition-all duration-200">
-                                                    <p className="text-center font-medium text-slate-800 dark:text-slate-200">
-                                                        Optimal Harvest: May 12th - 14th
-                                                    </p>
-                                                    <div className="mt-2 flex justify-center">
-                                                        <span className="inline-block rounded border border-[#00FF66]/30 bg-[#00FF66]/10 px-2 py-0.5 text-xs font-semibold text-[#00FF66]">
-                                                            AI Confidence: 94%
+                                            {healthAnalysisStatus === 'complete' && (
+                                                <div className={`mt-6 rounded-2xl border p-4 backdrop-blur-md transition-all duration-200 ${healthResult.boxClass}`}>
+                                                    <div className="flex justify-between items-center mb-2">
+                                                        <span className="font-bold text-slate-800 dark:text-slate-200 truncate pr-2" title={globalActiveProfile}>{globalActiveProfile}</span>
+                                                        <span className={`shrink-0 inline-block rounded border px-2 py-0.5 text-xs font-bold ${healthResult.badgeClass}`}>
+                                                            {healthResult.status} ({healthResult.score}%)
                                                         </span>
                                                     </div>
-                                                    <div className="mt-3 text-center">
+                                                    <ul className="text-xs text-slate-600 dark:text-slate-400 space-y-1 mb-3 list-disc pl-4">
+                                                        {healthResult.details.map((d, i) => <li key={i}>{d}</li>)}
+                                                    </ul>
+                                                    <div className="text-center mt-3">
                                                         <button
-                                                            onClick={handleResetHarvest}
-                                                            className="text-xs text-slate-500 transition-colors hover:text-[#00FF66] underline decoration-slate-600 hover:decoration-[#00FF66]/50 underline-offset-2"
+                                                            onClick={handleResetHealthAnalysis}
+                                                            className="text-xs font-medium text-slate-500 transition-colors hover:text-cyan-500 underline decoration-slate-400 hover:decoration-cyan-500 underline-offset-2"
                                                         >
-                                                            Recalculate
+                                                            Recalculate Health
                                                         </button>
                                                     </div>
                                                 </div>
                                             )}
 
                                             <p className="mt-4 text-center text-xs italic text-slate-500 md:text-left">
-                                                Optimizing water delivery for maximum yield...
+                                                Monitoring crop vitals against target parameters...
                                             </p>
                                         </section>
 
