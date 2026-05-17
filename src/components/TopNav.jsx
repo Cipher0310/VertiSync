@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { Bell, ChevronDown, Menu, AlertTriangle, Droplet, CheckCircle2, Sprout } from 'lucide-react';
+import { Bell, ChevronDown, Menu, AlertTriangle, Droplet, CheckCircle2, Sprout, CloudLightning } from 'lucide-react';
 import { plantProfiles } from '../data/plantProfile.js';
 
-export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, setGlobalActiveProfile }) {
+export default function TopNav({ onMenuClick, sidebarOpen, globalActiveProfile, setGlobalActiveProfile, predictiveAlerts = [] }) {
     const [showNotifications, setShowNotifications] = useState(false);
-    const [unreadCount, setUnreadCount] = useState(3);
+    const [unreadCount, setUnreadCount] = useState(3 + predictiveAlerts.length);
 
     const [showProfileMenu, setShowProfileMenu] = useState(false);
 
@@ -37,6 +37,21 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
             bg: 'bg-emerald-400/10'
         }
     ];
+
+    const dynamicNotifications = predictiveAlerts.map((alert, index) => {
+        const isDryness = alert.includes("DRYNESS");
+        return {
+            id: `dyn-${index}`,
+            title: isDryness ? 'Critical Dryness' : 'Extreme Weather Alert',
+            time: 'Just now',
+            desc: alert,
+            icon: isDryness ? Droplet : CloudLightning,
+            color: 'text-rose-500',
+            bg: 'bg-rose-500/10'
+        };
+    });
+
+    const allNotifications = [...dynamicNotifications, ...notifications];
 
     return (
     <header className="sticky top-0 z-50 flex shrink-0 items-center justify-between gap-3 border-b border-slate-200 bg-white/80 dark:border-slate-800/80 dark:bg-slate-900/80 px-4 py-3 backdrop-blur-md md:px-6 transition-colors">
@@ -125,7 +140,7 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
                     </div>
 
                     <div className="flex max-h-[70vh] flex-col gap-1 overflow-y-auto">
-                        {notifications.map((note) => (
+                        {allNotifications.map((note) => (
                             <div key={note.id} className="flex items-start gap-3 rounded-xl p-3 transition hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer">
                                 <div className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-800/60 ${note.bg}`}>
                                     <note.icon className={`h-4 w-4 ${note.color}`} />
@@ -135,7 +150,7 @@ export default function TopNav({ onMenuClick, sidebarOpen,globalActiveProfile, s
                                         <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{note.title}</p>
                                         <span className="text-[10px] text-slate-500">{note.time}</span>
                                     </div>
-                                    <p className="text-xs text-slate-600 dark:text-slate-400">{note.desc}</p>
+                                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-snug">{note.desc}</p>
                                 </div>
                             </div>
                         ))}

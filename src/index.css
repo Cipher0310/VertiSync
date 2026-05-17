@@ -32,3 +32,12 @@
 .scroll-bento::-webkit-scrollbar-thumb {
   @apply rounded-full bg-slate-300 dark:bg-slate-700;
 }
+
+@keyframes wave {
+  0% { transform: translateX(0) translateY(-90%); }
+  100% { transform: translateX(-50%) translateY(-90%); }
+}
+
+.animate-wave {
+  animation: wave 4s linear infinite;
+}
