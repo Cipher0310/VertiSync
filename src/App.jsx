@@ -8,7 +8,8 @@ import {
     Droplet,
     SunMedium,
     CloudLightning,
-    Bot
+    Bot,
+    X
 } from 'lucide-react';
 import { database } from './firebase.js';
 import { ref, onValue } from 'firebase/database';
@@ -85,6 +86,9 @@ export default function App() {
     const [timeToDryness, setTimeToDryness] = useState('2h 15m');
     const [currentPh, setCurrentPh] = useState(6.2);
     const [autopilot, setAutopilot] = useState(false);
+    
+    // Alert dismissal state
+    const [hideDrynessAlert, setHideDrynessAlert] = useState(false);
 
     const currentMoistureRef = useRef(currentMoisture);
     const currentTempRef = useRef(currentTemp);
@@ -402,6 +406,12 @@ export default function App() {
     const displayMoistureHistory = activeSensor === 'Sensor 1' ? moistureHistory : Array(30).fill(0);
     const displayTempHistory = activeSensor === 'Sensor 1' ? tempHistory : Array(30).fill(0);
 
+    useEffect(() => {
+        if (displayMoisture > 20) {
+            setHideDrynessAlert(false);
+        }
+    }, [displayMoisture]);
+
     return (
         <>
             {/* If the user is NOT authenticated, show the login screen */}
@@ -430,17 +440,24 @@ export default function App() {
                         />
 
                         {/* Real-Time Critical Dryness Toast Alert */}
-                        {displayMoisture <= 20 && activeSensor === 'Sensor 1' && (
+                        {displayMoisture <= 20 && activeSensor === 'Sensor 1' && !hideDrynessAlert && (
                             <div className="fixed bottom-6 right-6 z-[100] flex animate-bounce items-center gap-4 rounded-2xl border border-rose-500 bg-rose-500/95 px-6 py-4 text-white shadow-[0_0_30px_rgba(244,63,94,0.4)] backdrop-blur-md">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20">
                                     <Droplets className="h-7 w-7 text-white" />
                                 </div>
-                                <div>
+                                <div className="pr-6">
                                     <h3 className="text-base font-extrabold uppercase tracking-widest text-white">Critical Dryness Alert</h3>
                                     <p className="mt-1 text-sm font-medium text-white/90">
                                         Real-time soil moisture dropped to <span className="font-bold text-white">{displayMoisture}%</span>. Immediate irrigation required!
                                     </p>
                                 </div>
+                                <button 
+                                    onClick={() => setHideDrynessAlert(true)}
+                                    className="absolute top-2 right-2 rounded-full p-1 text-white/70 hover:bg-white/20 hover:text-white transition-colors"
+                                    aria-label="Dismiss Alert"
+                                >
+                                    <X className="h-4 w-4" />
+                                </button>
                             </div>
                         )}
 
