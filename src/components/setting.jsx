@@ -34,7 +34,7 @@ function SettingsToggle({ label, description, isOn, onToggle }) {
     );
 }
 
-export default function Settings({ theme, setTheme }) {
+export default function Settings({ theme, setTheme, availableSensors, setAvailableSensors }) {
 
     const [userName, setUserName] = useState(() => localStorage.getItem('vertiSync_activeUserName') || 'Administrator');
     // --- 1. FUNCTIONAL STATE (Reading from LocalStorage on load) ---
@@ -129,6 +129,46 @@ export default function Settings({ theme, setTheme }) {
 
                 {/* Left Column: AI & Notifications */}
                 <div className="flex flex-col gap-6 lg:col-span-7">
+
+                    {/* Sensor Management Block */}
+                    <section className="rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800/80 dark:bg-slate-900/50 p-6 shadow-lg dark:shadow-xl backdrop-blur-sm transition-colors">
+                        <div className="mb-5 flex items-center justify-between border-b border-slate-200 dark:border-slate-800/80 pb-4 transition-colors">
+                            <div className="flex items-center gap-3">
+                                <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-cyan-500/30 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shadow-neon-cyan">
+                                    <Server className="h-5 w-5" />
+                                </div>
+                                <div>
+                                    <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-200">Sensor Management</h2>
+                                    <p className="text-xs text-slate-500">Manage available hardware sensor nodes.</p>
+                                </div>
+                            </div>
+                            <button
+                                onClick={() => setAvailableSensors([...availableSensors, `Sensor ${availableSensors.length + 1}`])}
+                                className="rounded-lg bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 transition-colors"
+                            >
+                                + Add Sensor
+                            </button>
+                        </div>
+
+                        <div className="space-y-2">
+                            {availableSensors.map((sensor, idx) => (
+                                <div key={idx} className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50/50 dark:border-slate-700/50 dark:bg-slate-800/30 px-4 py-3">
+                                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{sensor}</span>
+                                    {sensor !== 'Sensor 1' && (
+                                        <button
+                                            onClick={() => setAvailableSensors(availableSensors.filter((s) => s !== sensor))}
+                                            className="text-xs font-medium text-rose-500 hover:text-rose-600 dark:text-rose-400 dark:hover:text-rose-300 transition-colors"
+                                        >
+                                            Remove
+                                        </button>
+                                    )}
+                                    {sensor === 'Sensor 1' && (
+                                        <span className="text-xs font-medium text-slate-400">Primary (Cannot Remove)</span>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </section>
 
                     {/* AI & Automation Block */}
                     <section className="rounded-3xl border border-slate-200 bg-white/50 dark:border-slate-800/80 dark:bg-slate-900/50 p-6 shadow-lg dark:shadow-xl backdrop-blur-sm transition-colors">

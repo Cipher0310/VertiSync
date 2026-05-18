@@ -41,9 +41,21 @@ export default function App() {
         return localStorage.getItem('vertiSync_theme') || 'dark';
     });
 
+    const [availableSensors, setAvailableSensors] = useState(() => {
+        const saved = localStorage.getItem('vertiSync_sensors');
+        return saved ? JSON.parse(saved) : ['Sensor 1', 'Sensor 2', 'Sensor 3', 'Sensor 4'];
+    });
+    
+    const [activeSensor, setActiveSensor] = useState('Sensor 1');
+
     useEffect(() => {
         localStorage.setItem('vertiSync_activeProfile', globalActiveProfile);
+        setActiveSensor('Sensor 1'); // Reset to Sensor 1 when profile changes
     }, [globalActiveProfile]);
+
+    useEffect(() => {
+        localStorage.setItem('vertiSync_sensors', JSON.stringify(availableSensors));
+    }, [availableSensors]);
 
     useEffect(() => {
         localStorage.setItem('vertiSync_theme', theme);
@@ -381,6 +393,15 @@ export default function App() {
         predictiveAlerts.push(`PREDICTIVE DRYNESS WARNING: Soil will reach critical dryness in ${timeToDryness}.`);
     }
 
+    // Determine displayed values based on active sensor
+    const displayMoisture = activeSensor === 'Sensor 1' ? currentMoisture : 0;
+    const displayTemp = activeSensor === 'Sensor 1' ? currentTemp : 0;
+    const displayHumidity = activeSensor === 'Sensor 1' ? currentHumidity : 0;
+    const displayPh = activeSensor === 'Sensor 1' ? currentPh : 0;
+
+    const displayMoistureHistory = activeSensor === 'Sensor 1' ? moistureHistory : Array(30).fill(0);
+    const displayTempHistory = activeSensor === 'Sensor 1' ? tempHistory : Array(30).fill(0);
+
     return (
         <>
             {/* If the user is NOT authenticated, show the login screen */}
@@ -403,10 +424,13 @@ export default function App() {
                             globalActiveProfile={globalActiveProfile}
                             setGlobalActiveProfile={setGlobalActiveProfile}
                             predictiveAlerts={predictiveAlerts}
+                            availableSensors={availableSensors}
+                            activeSensor={activeSensor}
+                            setActiveSensor={setActiveSensor}
                         />
 
                         {/* Real-Time Critical Dryness Toast Alert */}
-                        {currentMoisture <= 20 && (
+                        {displayMoisture <= 20 && activeSensor === 'Sensor 1' && (
                             <div className="fixed bottom-6 right-6 z-[100] flex animate-bounce items-center gap-4 rounded-2xl border border-rose-500 bg-rose-500/95 px-6 py-4 text-white shadow-[0_0_30px_rgba(244,63,94,0.4)] backdrop-blur-md">
                                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20">
                                     <Droplets className="h-7 w-7 text-white" />
@@ -414,7 +438,7 @@ export default function App() {
                                 <div>
                                     <h3 className="text-base font-extrabold uppercase tracking-widest text-white">Critical Dryness Alert</h3>
                                     <p className="mt-1 text-sm font-medium text-white/90">
-                                        Real-time soil moisture dropped to <span className="font-bold text-white">{currentMoisture}%</span>. Immediate irrigation required!
+                                        Real-time soil moisture dropped to <span className="font-bold text-white">{displayMoisture}%</span>. Immediate irrigation required!
                                     </p>
                                 </div>
                             </div>
@@ -437,10 +461,10 @@ export default function App() {
                                     <>
                                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
                                             <HydrationMatrix 
-                                                currentMoisture={currentMoisture} 
-                                                moistureHistory={moistureHistory} 
-                                                currentTemp={currentTemp} 
-                                                tempHistory={tempHistory} 
+                                                currentMoisture={displayMoisture} 
+                                                moistureHistory={displayMoistureHistory} 
+                                                currentTemp={displayTemp} 
+                                                tempHistory={displayTempHistory} 
                                             />
 
                                             <PredictiveEngine 
@@ -469,9 +493,9 @@ export default function App() {
                                             />
 
                                             <EnvironmentalOverview 
-                                                currentTemp={currentTemp}
-                                                currentHumidity={currentHumidity}
-                                                currentPh={currentPh}
+                                                currentTemp={displayTemp}
+                                                currentHumidity={displayHumidity}
+                                                currentPh={displayPh}
                                             />
 
 
@@ -497,7 +521,12 @@ export default function App() {
                                     <Analytics activeProfile={globalActiveProfile} />
                                 ) : currentView === 'settings' ? (
                                     /* RENDER THE SETTINGS WHEN SELECTED */
-                                    <Settings theme={theme} setTheme={setTheme} />
+                                    <Settings 
+                                        theme={theme} 
+                                        setTheme={setTheme} 
+                                        availableSensors={availableSensors}
+                                        setAvailableSensors={setAvailableSensors}
+                                    />
                                 ) : (
                                     /* Fallback for other pages */
                                     <div className="flex h-64 items-center justify-center rounded-3xl border border-slate-800/80 bg-slate-900/50 backdrop-blur-sm">

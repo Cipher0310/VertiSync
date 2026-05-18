@@ -2,11 +2,21 @@ import { useState } from 'react';
 import { Bell, ChevronDown, Menu, AlertTriangle, Droplet, CheckCircle2, Sprout, CloudLightning } from 'lucide-react';
 import { plantProfiles } from '../data/plantProfile.js';
 
-export default function TopNav({ onMenuClick, sidebarOpen, globalActiveProfile, setGlobalActiveProfile, predictiveAlerts = [] }) {
+export default function TopNav({ 
+    onMenuClick, 
+    sidebarOpen, 
+    globalActiveProfile, 
+    setGlobalActiveProfile, 
+    predictiveAlerts = [],
+    availableSensors = [],
+    activeSensor,
+    setActiveSensor
+}) {
     const [showNotifications, setShowNotifications] = useState(false);
     const [unreadCount, setUnreadCount] = useState(3 + predictiveAlerts.length);
 
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    const [showSensorMenu, setShowSensorMenu] = useState(false);
 
     const notifications = [
         {
@@ -64,6 +74,7 @@ export default function TopNav({ onMenuClick, sidebarOpen, globalActiveProfile, 
                 type="button"
                 onClick={() => {
                     setShowProfileMenu(!showProfileMenu);
+                    setShowSensorMenu(false);
                     setShowNotifications(false); // Close the other menu if open
                 }}
                 className={`flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm transition-all ${
@@ -105,6 +116,51 @@ export default function TopNav({ onMenuClick, sidebarOpen, globalActiveProfile, 
                     </div>
                 </div>
             )}
+            
+            {/* Sensor Dropdown */}
+            <div className="relative ml-2 flex justify-center">
+                <button
+                    type="button"
+                    onClick={() => {
+                        setShowSensorMenu(!showSensorMenu);
+                        setShowProfileMenu(false);
+                        setShowNotifications(false);
+                    }}
+                    className={`flex items-center justify-center gap-2 rounded-full border px-4 py-2 text-sm transition-all ${
+                        showSensorMenu
+                            ? 'border-cyan-500/50 bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 shadow-sm dark:shadow-neon-cyan'
+                            : 'border-slate-300 bg-slate-50 text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/70 dark:text-slate-300 hover:border-slate-400 dark:hover:border-slate-600'
+                    }`}
+                >
+                    <span className={showSensorMenu ? "text-cyan-600/70 dark:text-cyan-500/70" : "text-slate-500"}>Sensor:</span>
+                    <span className="font-medium">{activeSensor}</span>
+                    <ChevronDown className={`ml-1 h-4 w-4 transition-transform ${showSensorMenu ? 'rotate-180 text-cyan-500 dark:text-cyan-400' : 'text-slate-500'}`} aria-hidden />
+                </button>
+
+                {/* Sensor Dropdown Panel */}
+                {showSensorMenu && (
+                    <div className="absolute top-full mt-2 w-48 rounded-2xl border border-slate-200 bg-white/95 dark:border-slate-800/80 dark:bg-slate-900/95 p-2 shadow-2xl backdrop-blur-xl z-50 transition-colors">
+                        <div className="flex max-h-60 flex-col gap-1 overflow-y-auto">
+                            {availableSensors.map((sensor, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => {
+                                        setActiveSensor(sensor);
+                                        setShowSensorMenu(false);
+                                    }}
+                                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all text-left ${
+                                        activeSensor === sensor
+                                            ? 'bg-cyan-50 dark:bg-cyan-500/10 text-cyan-600 dark:text-cyan-400'
+                                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-900 dark:hover:text-white'
+                                    }`}
+                                >
+                                    <span className="truncate text-sm font-medium">{sensor}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
 
         <div className="flex items-center gap-2 relative">
