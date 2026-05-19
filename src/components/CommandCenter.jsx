@@ -3,7 +3,7 @@ import { Bot, Droplets, Fan, Lightbulb, Droplet } from 'lucide-react';
 
 function ToggleRow({ icon: Icon, label, on, onToggle, disabled = false }) {
     return (
-        <div className={`flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white dark:border-slate-800/60 dark:bg-slate-950/30 px-3 py-2.5 transition-colors ${disabled ? 'opacity-60 grayscale' : ''}`}>
+        <div className={`flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white dark:border-slate-800/60 dark:bg-slate-950/30 px-3 py-2.5 transition-colors ${disabled ? 'opacity-60' : ''}`}>
             <div className="flex min-w-0 items-center gap-3">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-cyan-600 dark:border-slate-800 dark:bg-slate-900/80 dark:text-cyan-400/90">
                     <Icon className="h-5 w-5" strokeWidth={1.75} />
@@ -16,7 +16,7 @@ function ToggleRow({ icon: Icon, label, on, onToggle, disabled = false }) {
                 aria-checked={on}
                 disabled={disabled}
                 onClick={() => !disabled && onToggle(!on)}
-                className={`relative h-8 w-14 shrink-0 rounded-full border transition ${on && !disabled
+                className={`relative h-8 w-14 shrink-0 rounded-full border transition ${on
                         ? 'border-emerald-500/50 bg-gradient-to-r from-emerald-400 to-cyan-400 dark:from-emerald-500/80 dark:to-cyan-500/70 shadow-neon'
                         : 'border-slate-300 bg-slate-200 dark:border-slate-700 dark:bg-slate-800/80'
                     } ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
@@ -93,10 +93,8 @@ export default function CommandCenter({
                 onMouseLeave={!autopilot ? handlePumpEnd : undefined}
                 onTouchStart={!autopilot ? handlePumpStart : undefined}
                 onTouchEnd={!autopilot ? handlePumpEnd : undefined}
-                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm uppercase tracking-wide shadow-neon transition-all duration-200 active:scale-[0.99] ${autopilot && isPumpActive
-                        ? 'bg-purple-500 text-white font-bold shadow-neon-purple'
-                        : isPumpActive
-                        ? 'bg-[#00E5FF] text-black font-bold'
+                className={`mt-5 flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm uppercase tracking-wide shadow-neon transition-all duration-200 active:scale-[0.99] ${isPumpActive
+                        ? 'bg-[#00E5FF] text-black font-bold shadow-neon-cyan'
                         : 'bg-gradient-to-r from-emerald-400 to-cyan-400 text-slate-950 font-bold hover:brightness-110'
                     } ${autopilot ? 'cursor-not-allowed opacity-90' : ''}`}
             >
